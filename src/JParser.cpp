@@ -339,18 +339,4 @@ namespace ZQF::ZxJson
 		default: throw std::runtime_error("ZxJson::JParser::ParseValue(): value error!");
 		}
 	}
-
-	auto Load(std::span<char> spData) -> JValue
-	{
-		JValue jv;
-		JParser{ spData }.Parse(jv);
-		return jv;
-	}
-
-	auto Dump(JValue& rfJValue, bool isFormat) -> std::string
-	{
-		std::string dump_str;
-		rfJValue.Dump(dump_str, isFormat, 0);
-		return dump_str;
-	}
 }

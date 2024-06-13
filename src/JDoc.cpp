@@ -1,4 +1,5 @@
 #include <ZxJson/JDoc.h>
+#include <ZxJson/Platform.h>
 
 
 namespace ZQF::ZxJson
@@ -8,9 +9,9 @@ namespace ZQF::ZxJson
 
 	};
 
-	JDoc::JDoc(std::span<char> spData)
+	JDoc::JDoc(const std::string_view msPath)
 	{
-		this->Load(spData);
+		this->LoadViaFile(msPath);
 	};
 
 	JDoc::~JDoc()
@@ -33,7 +34,13 @@ namespace ZQF::ZxJson
 		return m_JValue.Sure<JObject_t&>();
 	}
 
-	auto JDoc::Load(std::span<char> spData) -> bool
+	auto JDoc::LoadViaFile(const std::string_view msPath) -> bool
+	{
+		auto [file_size, file_data] = ZxJson::RreadAllBytes(msPath);
+		return this->LoadViaMemory(std::span{ file_data.get(),file_size });
+	}
+
+	auto JDoc::LoadViaMemory(std::span<char> spData) -> bool
 	{
 		return JParser{ spData }.Parse(m_JValue);
 	}
@@ -43,5 +50,31 @@ namespace ZQF::ZxJson
 		std::string json;
 		m_JValue.Dump(json, isFormat, 0);
 		return json;
+	}
+
+	auto LoadViaFile(const std::string_view msPath) -> JValue
+	{
+		auto [file_size, file_data] = ZxJson::RreadAllBytes(msPath);
+		return ZxJson::LoadViaMemory(std::span{ file_data.get(),file_size });
+	}
+
+	auto LoadViaMemory(std::span<char> spData) -> JValue
+	{
+		JValue jv;
+		JParser{ spData }.Parse(jv);
+		return jv;
+	}
+
+	auto StoreViaString(JValue& rfJValue, bool isFormat) -> std::string
+	{
+		std::string dump_str;
+		rfJValue.Dump(dump_str, isFormat, 0);
+		return dump_str;
+	}
+
+	auto StoreViaFile(const std::string_view msPath, JValue& rfJValue, bool isFormat, bool isForceSave) -> void
+	{
+		std::string dump_str = ZxJson::StoreViaString(rfJValue, isFormat);
+		ZxJson::WriteAllBytes(msPath, dump_str, isForceSave);
 	}
 }

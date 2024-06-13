@@ -71,7 +71,7 @@ static auto BenchJsonParser() -> void
 	for (size_t i = 0; i < 200; i++)
 	{
 		record.Beg();
-		auto jv = ZQF::ZxJson::Load(raw_data);
+		auto jv = ZQF::ZxJson::LoadViaMemory(raw_data);
 		record.End();
 	}
 
@@ -82,12 +82,12 @@ static auto BenchJsonDumper() -> void
 {
 	ZQF::ZxRecord record;
 
-	auto raw_data = ::FetchFileData(u8"1.json");
-	auto jv = ZQF::ZxJson::Load(raw_data);
+	ZQF::ZxJson::JDoc jdoc{ "1.json" };
+	auto& jv = jdoc.GetJValue();
 	for (size_t i = 0; i < 200; i++)
 	{
 		record.Beg();
-		auto dump_str = ZQF::ZxJson::Dump(jv, true);
+		auto dump_str = ZQF::ZxJson::StoreViaString(jv, true);
 		dump_str[0] = {};
 		record.End();
 	}
@@ -101,13 +101,13 @@ static auto BenchJsonDumper() -> void
 static auto TestJsonParser() -> void
 {
 	auto raw_data = ::FetchFileData(u8"1.json");
-	auto jv = ZQF::ZxJson::Load(raw_data);
+	auto jv = ZQF::ZxJson::LoadViaMemory(raw_data);
 }
 
 static auto TestJsonDumper() -> void
 {
 	auto raw_data = ::FetchFileData(u8"1.json");
-	auto jv = ZQF::ZxJson::Load(raw_data);
+	auto jv = ZQF::ZxJson::LoadViaMemory(raw_data);
 
 	std::string d0;
 	jv.Dump(d0, true, 0);
@@ -223,17 +223,28 @@ static auto TestJsonParseUnicodeEscape() -> bool
 	return jv.Get<std::string_view>() == str1;
 }
 
+static auto TestLoadStoreViaFile() -> void
+{
+	auto jv = ZQF::ZxJson::LoadViaFile("1.json");
+	if (jv["hash"].Get<std::string_view>() != "7954b83446bdb525c23a8a6677c498e6")
+	{
+		throw std::runtime_error("TestLoadViaFile(): failed");
+	};
+	ZQF::ZxJson::StoreViaFile("666.json", jv, true, true);
+}
 
 auto main() -> int
 {
 	try
 	{
-		TestJsonParser();
-		TestJsonDumper();
-		TestJsonValue();
-		TestJsonParseRegularEscape();
-		TestJsonParseUnicodeEscape();
-		// BenchJsonParser();
+		TestLoadStoreViaFile();
+		//TestJsonParser();
+		//TestJsonDumper();
+		//TestJsonValue();
+		//TestJsonParseRegularEscape();
+		//TestJsonParseUnicodeEscape();
+		//BenchJsonDumper();
+		//BenchJsonParser();
 	}
 	catch (const std::exception& err)
 	{

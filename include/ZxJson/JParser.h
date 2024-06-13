@@ -42,8 +42,5 @@ namespace ZQF::ZxJson
 		auto ParseNull(JValue& rfJValue) -> void;
 		auto ParseValue(JValue& rfJValue) -> void;
 	};
-
-	auto Load(std::span<char> spData) -> JValue;
-	auto Dump(JValue& rfJValue, bool isFormat) -> std::string;
 }
 
