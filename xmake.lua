@@ -32,7 +32,6 @@ target("zxjson")
     add_files("src/**.cpp")
     add_includedirs("include", {public = true})
     add_headerfiles("include/(**.h)")
-    add_packages("wx32", {public = true})
 
 target("zxjson-test")
     set_default(false)

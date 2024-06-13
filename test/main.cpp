@@ -228,12 +228,12 @@ auto main() -> int
 {
 	try
 	{
-		// TestJsonParser();
-		// TestJsonDumper();
-		// TestJsonValue();
-		// TestJsonParseRegularEscape();
-		// TestJsonParseUnicodeEscape();
-		BenchJsonParser();
+		TestJsonParser();
+		TestJsonDumper();
+		TestJsonValue();
+		TestJsonParseRegularEscape();
+		TestJsonParseUnicodeEscape();
+		// BenchJsonParser();
 	}
 	catch (const std::exception& err)
 	{
