@@ -1,5 +1,6 @@
 #include <ZxJson/JParser.h>
-
+#include <cstring>
+#include <cmath>
 
 namespace ZQF::ZxJson
 {

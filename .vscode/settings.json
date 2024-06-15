@@ -1,0 +1,30 @@
+{
+
+    "[cpp]": {
+        "editor.inlayHints.enabled": "off",
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": false,
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    },
+
+    "[c]": {
+        "editor.inlayHints.enabled": "off",
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": false,
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    },
+
+    "clangd.arguments": [
+        "--background-index",
+        "-j=16",
+        "--clang-tidy",
+        "--all-scopes-completion",
+        "--completion-style=detailed",
+        "--header-insertion=never",
+        "-compile-commands-dir=.vscode"
+    ],
+
+    "lldb.displayFormat": "hex",
+
+    "xmake.debugConfigType": "codelldb"
+}

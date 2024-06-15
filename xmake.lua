@@ -8,8 +8,8 @@ set_languages("c++23")
 set_encodings("utf-8")
 
 -- allows
-set_allowedplats("windows")
-set_allowedarchs("x86", "x64")
+set_allowedplats("windows", "linux")
+set_allowedarchs("x86", "x64", "x86_64")
 set_allowedmodes("debug", "release", "releasedbg")
 
 -- rules
