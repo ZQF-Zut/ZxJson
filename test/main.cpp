@@ -48,6 +48,7 @@ auto ZxRecord::Log() -> void
 }
 } // namespace ZQF
 
+// NOLINTBEGIN
 namespace
 {
 // # Utils #
@@ -71,7 +72,7 @@ auto FetchFileData(const std::filesystem::path& phJson) -> std::string
     for (size_t i = 0; i < 200; i++)
     {
         record.Beg();
-        auto jv = ZQF::ZxJson::LoadViaMemory(raw_data);
+        auto json_value = ZQF::ZxJson::LoadViaMemory(raw_data);
         record.End();
     }
 
@@ -83,11 +84,11 @@ auto FetchFileData(const std::filesystem::path& phJson) -> std::string
     ZQF::ZxRecord record;
 
     ZQF::ZxJson::JDoc jdoc{ "1.json" };
-    auto& jv = jdoc.GetJValue();
+    auto& json_value = jdoc.GetJValue();
     for (size_t i = 0; i < 200; i++)
     {
         record.Beg();
-        auto dump_str = ZQF::ZxJson::StoreViaString(jv, true);
+        auto dump_str = ZQF::ZxJson::StoreViaString(json_value, true);
         dump_str[0] = {};
         record.End();
     }
@@ -100,37 +101,37 @@ auto FetchFileData(const std::filesystem::path& phJson) -> std::string
 [[maybe_unused]] auto TestJsonParser() -> void
 {
     auto raw_data = ::FetchFileData(u8"1.json");
-    auto jv = ZQF::ZxJson::LoadViaMemory(raw_data);
+    auto json_value = ZQF::ZxJson::LoadViaMemory(raw_data);
 }
 
 [[maybe_unused]] auto TestJsonDumper() -> void
 {
     auto raw_data = ::FetchFileData(u8"1.json");
-    auto jv = ZQF::ZxJson::LoadViaMemory(raw_data);
+    auto json_value = ZQF::ZxJson::LoadViaMemory(raw_data);
 
-    std::string d0;
-    jv.Dump(d0, true, 0);
+    std::string data0;
+    json_value.Dump(data0, true, 0);
     assert(d0.size());
 
-    std::string d1;
-    jv.Dump(d1, false, 0);
+    std::string data1;
+    json_value.Dump(data1, false, 0);
     assert(d1.size());
 }
 
 [[maybe_unused]] auto TestJsonValue() -> void
 {
-    ZQF::ZxJson::JValue jv;
-    jv = 1;
+    ZQF::ZxJson::JValue json_value;
+    json_value = 1;
     assert(jv.Get<size_t>() == 1);
-    jv = 1.2;
+    json_value = 1.2;
     assert(jv.Get<double>() == 1.2);
-    jv = "123";
+    json_value = "123";
     assert(jv.Get<std::string_view>() == "123");
-    jv = std::string("5666");
+    json_value = std::string("5666");
     assert(jv.Get<std::string>() == "5666");
     assert(jv.Get<std::string&>() == "5666");
 
-    ZQF::ZxJson::JValue jv1 = std::move(jv);
+    ZQF::ZxJson::JValue jv1 = std::move(json_value);
     assert(jv.Check<ZQF::ZxJson::JNull_t>());
     assert(jv1.Get<std::string>() == "5666");
     assert(jv1.Get<std::string&>() == "5666");
@@ -161,11 +162,11 @@ auto FetchFileData(const std::filesystem::path& phJson) -> std::string
     ZQF::ZxJson::JArray_t jarr1 = std::move(jarr);
     assert(jarr.empty());
 
-    jv = std::move(jarr1);
+    json_value = std::move(jarr1);
     assert(jarr1.empty());
 
     ZQF::ZxJson::JObject_t jobj1 = std::move(jobj);
-    jobj1["arrayx"] = std::move(jv);
+    jobj1["arrayx"] = std::move(json_value);
     assert(jv.Check<ZQF::ZxJson::JNull_t>());
 
     assert(jobj1["arrayx"][0].Get<size_t>() == 1);
@@ -173,7 +174,7 @@ auto FetchFileData(const std::filesystem::path& phJson) -> std::string
     auto& jarr2 = jobj1["arrayx"].Get<ZQF::ZxJson::JArray_t&>();
     assert(jarr2.size() == 4);
 
-    jv = std::move(jobj1);
+    json_value = std::move(jobj1);
     assert(jv["532532"].Get<size_t>() == 1);
 
     int a = 0;
@@ -215,21 +216,23 @@ auto FetchFileData(const std::filesystem::path& phJson) -> std::string
     constexpr std::string_view str0 = R"JSON("\u5FAE\u79ef\u5206\u57fa\u672c\u5b9a\u7406\uff08Fundamental Theorem of Calculus\uff09\u53c8\u79f0\u5fae\u79ef\u5206\u57fa\u672c\u516c\u5f0f\uff0c\u8bc1\u5b9e\u5fae\u5206\u548c\u79ef\u5206\u4e92\u4e3a\u9006\u8fd0\u7b97")JSON";
     constexpr std::string_view str1 = R"JSON(微积分基本定理（Fundamental Theorem of Calculus）又称微积分基本公式，证实微分和积分互为逆运算)JSON";
 
-    ZQF::ZxJson::JValue jv;
-    ZQF::ZxJson::JParser{ str0 }.Parse(jv);
-    return jv.Get<std::string_view>() == str1;
+    ZQF::ZxJson::JValue json_value;
+    ZQF::ZxJson::JParser{ str0 }.Parse(json_value);
+    return json_value.Get<std::string_view>() == str1;
 }
 
 [[maybe_unused]] auto TestLoadStoreViaFile() -> void
 {
-    auto jv = ZQF::ZxJson::LoadViaFile("1.json");
-    if (jv["hash"].Get<std::string_view>() != "7954b83446bdb525c23a8a6677c498e6")
+    auto json_value = ZQF::ZxJson::LoadViaFile("1.json");
+    if (json_value["hash"].Get<std::string_view>() != "7954b83446bdb525c23a8a6677c498e6")
     {
         throw std::runtime_error("TestLoadViaFile(): failed");
     };
-    ZQF::ZxJson::StoreViaFile("666.json", jv, true, true);
+    ZQF::ZxJson::StoreViaFile("666.json", json_value, true, true);
 }
 } // namespace
+
+// NOLINTEND
 
 auto main() -> int
 {

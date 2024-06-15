@@ -8,4 +8,5 @@ AlignAfterOpenBracket: AlwaysBreak
 AllowShortLoopsOnASingleLine: true
 AllowShortBlocksOnASingleLine: true
 AllowShortFunctionsOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
 AllowShortIfStatementsOnASingleLine: true

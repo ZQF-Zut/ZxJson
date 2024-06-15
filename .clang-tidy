@@ -10,18 +10,14 @@ Checks:
   portability-*,
   modernize-*,
   readability-*,
-  -cppcoreguidelines-avoid-do-while,
-  -cppcoreguidelines-pro-bounds-constant-array-index,
-  -cppcoreguidelines-pro-type-member-init,
+  -misc-no-recursion,
   -modernize-avoid-c-arrays,
-  -misc-misplaced-const,
   -readability-magic-numbers,
-  -readability-avoid-const-params-in-decls,
-  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+  -cppcoreguidelines-owning-memory,
   -cppcoreguidelines-avoid-c-arrays,
   -cppcoreguidelines-avoid-magic-numbers,
-  -cppcoreguidelines-pro-type-reinterpret-cast,
-  -cppcoreguidelines-avoid-non-const-global-variables,
+  -readability-avoid-const-params-in-decls,
+  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
   '
 
 CheckOptions:
