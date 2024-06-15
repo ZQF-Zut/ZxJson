@@ -22,7 +22,7 @@ class JDoc
     auto GetJObject() -> JObject_t&;
     auto LoadViaFile(const std::string_view msPath) -> bool;
     auto LoadViaMemory(std::span<char> spData) -> bool;
-    auto Dump(bool isFormat) const -> std::string;
+    auto Dump(bool isFormat) const -> std::string; // NOLINT
 };
 
 auto LoadViaMemory(std::span<char> spData) -> JValue;

@@ -93,6 +93,8 @@ auto FetchFileData(const std::filesystem::path& phJson) -> std::string
         record.End();
     }
 
+    jdoc.Dump(true);
+
     record.Log();
 }
 
@@ -171,13 +173,13 @@ auto FetchFileData(const std::filesystem::path& phJson) -> std::string
 
     assert(jobj1["arrayx"][0].Get<size_t>() == 1);
 
-    auto& jarr2 = jobj1["arrayx"].Get<ZQF::ZxJson::JArray_t&>();
+    [[maybe_unused]] auto& jarr2 = jobj1["arrayx"].Get<ZQF::ZxJson::JArray_t&>();
     assert(jarr2.size() == 4);
 
     json_value = std::move(jobj1);
     assert(jv["532532"].Get<size_t>() == 1);
 
-    int a = 0;
+    [[maybe_unused]] int a = 0;
 }
 
 [[maybe_unused]] auto TestJsonParseRegularEscape() -> bool
