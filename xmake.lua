@@ -9,7 +9,7 @@ set_encodings("utf-8")
 
 -- allows
 set_allowedplats("windows", "linux")
-set_allowedarchs("x86", "x64", "x86_64")
+set_allowedarchs("windows|x86", "windows|x64", "linux|x86_64")
 set_allowedmodes("debug", "release", "releasedbg")
 
 -- rules
