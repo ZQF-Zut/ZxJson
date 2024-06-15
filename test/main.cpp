@@ -113,28 +113,28 @@ auto FetchFileData(const std::filesystem::path& phJson) -> std::string
 
     std::string data0;
     json_value.Dump(data0, true, 0);
-    assert(d0.size());
+    assert(data0.size());
 
     std::string data1;
     json_value.Dump(data1, false, 0);
-    assert(d1.size());
+    assert(data0.size());
 }
 
 [[maybe_unused]] auto TestJsonValue() -> void
 {
     ZQF::ZxJson::JValue json_value;
     json_value = 1;
-    assert(jv.Get<size_t>() == 1);
+    assert(json_value.Get<size_t>() == 1);
     json_value = 1.2;
-    assert(jv.Get<double>() == 1.2);
+    assert(json_value.Get<double>() == 1.2);
     json_value = "123";
-    assert(jv.Get<std::string_view>() == "123");
+    assert(json_value.Get<std::string_view>() == "123");
     json_value = std::string("5666");
-    assert(jv.Get<std::string>() == "5666");
-    assert(jv.Get<std::string&>() == "5666");
+    assert(json_value.Get<std::string>() == "5666");
+    assert(json_value.Get<std::string&>() == "5666");
 
     ZQF::ZxJson::JValue jv1 = std::move(json_value);
-    assert(jv.Check<ZQF::ZxJson::JNull_t>());
+    assert(json_value.Check<ZQF::ZxJson::JNull_t>());
     assert(jv1.Get<std::string>() == "5666");
     assert(jv1.Get<std::string&>() == "5666");
 
@@ -169,7 +169,7 @@ auto FetchFileData(const std::filesystem::path& phJson) -> std::string
 
     ZQF::ZxJson::JObject_t jobj1 = std::move(jobj);
     jobj1["arrayx"] = std::move(json_value);
-    assert(jv.Check<ZQF::ZxJson::JNull_t>());
+    assert(json_value.Check<ZQF::ZxJson::JNull_t>());
 
     assert(jobj1["arrayx"][0].Get<size_t>() == 1);
 
@@ -177,7 +177,7 @@ auto FetchFileData(const std::filesystem::path& phJson) -> std::string
     assert(jarr2.size() == 4);
 
     json_value = std::move(jobj1);
-    assert(jv["532532"].Get<size_t>() == 1);
+    assert(json_value["532532"].Get<size_t>() == 1);
 
     [[maybe_unused]] int a = 0;
 }
