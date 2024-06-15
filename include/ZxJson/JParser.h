@@ -1,6 +1,6 @@
 #pragma once
-#include <span>
 #include <ZxJson/JValue.h>
+#include <span>
 
 namespace ZQF::ZxJson
 {
@@ -15,16 +15,16 @@ class JParser
     ~JParser();
     JParser(const JParser&) = delete;
     JParser(JParser&&) noexcept = delete;
-    JParser& operator=(const JParser&) = delete;
-    JParser& operator=(JParser&&) noexcept = delete;
+    auto operator=(const JParser&) -> JParser& = delete;
+    auto operator=(JParser&&) noexcept -> JParser& = delete;
 
     auto Parse(JValue& rfJValue) -> bool;
 
   private:
     auto CurPtr() -> const char*;
-    auto GetReadBytes() const -> size_t;
+    auto GetReadBytes() const -> size_t; // NOLINT
     auto AddReadBytes(size_t nCount = 1) -> void;
-    auto TotalBytes() const -> size_t;
+    auto TotalBytes() const -> size_t; // NOLINT
 
     auto SkipWhite() -> char;
     auto NextToken() -> char;
