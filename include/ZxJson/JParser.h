@@ -1,4 +1,5 @@
 #pragma once
+#include <span>
 #include <ZxJson/JValue.h>
 
 namespace ZQF::ZxJson
