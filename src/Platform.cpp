@@ -18,12 +18,12 @@ static auto PathUtf8ToWide(const std::string_view msPath, wchar_t* wpBuffer) -> 
     wpBuffer[char_count_real] = {};
 }
 
-auto RreadAllBytes(const std::string_view msPath) -> std::pair<size_t, std::unique_ptr<char[]>>
+auto ReadAllBytes(const std::string_view msPath) -> std::pair<size_t, std::unique_ptr<char[]>>
 {
     wchar_t path_buffer[MAX_PATH];
-    PathUtf8ToWide(msPath, path_buffer);
+    PathUtf8ToWide(msPath, path_buffer); // NOLINT
 
-    const HANDLE hfile = ::CreateFileW(path_buffer, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+    const HANDLE hfile = ::CreateFileW(path_buffer, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr); // NOLINT
     if (hfile == INVALID_HANDLE_VALUE) { throw std::runtime_error(std::format("ZxJson::RreadAllBytes(): open file error!. msPath: {}", msPath)); }
 
     auto file_size = static_cast<size_t>(::GetFileSize(hfile, nullptr));
@@ -41,9 +41,9 @@ auto RreadAllBytes(const std::string_view msPath) -> std::pair<size_t, std::uniq
 auto WriteAllBytes(const std::string_view msPath, const std::span<char> spData, bool isForceCreate) -> void
 {
     wchar_t path_buffer[MAX_PATH];
-    PathUtf8ToWide(msPath, path_buffer);
+    PathUtf8ToWide(msPath, path_buffer); // NOLINT
 
-    const HANDLE hfile = ::CreateFileW(path_buffer, GENERIC_WRITE, FILE_SHARE_READ, nullptr, isForceCreate ? CREATE_ALWAYS : CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr);
+    const HANDLE hfile = ::CreateFileW(path_buffer, GENERIC_WRITE, FILE_SHARE_READ, nullptr, isForceCreate ? CREATE_ALWAYS : CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr); // NOLINT
     if (hfile == INVALID_HANDLE_VALUE) { throw std::runtime_error(std::format("ZxJson::WriteAllBytes(): create file error!. msPath: {}", msPath)); }
 
     DWORD write{};
@@ -52,7 +52,7 @@ auto WriteAllBytes(const std::string_view msPath, const std::span<char> spData, 
     ::CloseHandle(hfile);
 }
 #else
-auto RreadAllBytes(const std::string_view msPath) -> std::pair<size_t, std::unique_ptr<char[]>>
+auto ReadAllBytes(const std::string_view msPath) -> std::pair<size_t, std::unique_ptr<char[]>>
 {
     FILE* data_fp = fopen(msPath.data(), "rb");
     if (data_fp == nullptr) { throw std::runtime_error(std::format("ZxJson::RreadAllBytes(): open file error!. msPath: {}", msPath)); }

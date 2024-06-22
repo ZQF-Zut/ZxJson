@@ -10,6 +10,8 @@ Checks:
   portability-*,
   modernize-*,
   readability-*,
+  -llvm-include-order,
+  -misc-misplaced-const,
   -misc-no-recursion,
   -modernize-avoid-c-arrays,
   -readability-magic-numbers,
