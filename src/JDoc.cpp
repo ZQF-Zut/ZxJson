@@ -39,7 +39,7 @@ namespace ZQF::ZxJson
 
     auto JDoc::LoadViaFile(const std::string_view msPath) -> bool
     {
-        auto [file_size, file_data] = ZxJson::ReadAllBytes(msPath);
+        auto [file_size, file_data] = ZxJsonPrivate::ReadAllBytes(msPath);
         return this->LoadViaMemory(std::span{ file_data.get(), file_size });
     }
 
@@ -53,6 +53,6 @@ namespace ZQF::ZxJson
     auto JDoc::StoreViaFile(const std::string_view msPath, bool isFormat, bool isForceSave) const -> void
     {
         auto json_str = this->StoreViaMemory(isFormat);
-        ZxJson::WriteAllBytes(msPath, std::span{ json_str }, isForceSave);
+        ZxJsonPrivate::WriteAllBytes(msPath, std::span{ json_str }, isForceSave);
     }
 } // namespace ZQF::ZxJson

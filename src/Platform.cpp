@@ -11,7 +11,7 @@
 #endif
 
 
-namespace ZQF::ZxJson
+namespace ZQF::ZxJsonPrivate
 {
 #ifdef _WIN32
     static auto PathUtf8ToWide(const std::string_view msPath) -> std::unique_ptr<wchar_t[]>
@@ -66,4 +66,4 @@ namespace ZQF::ZxJson
         ::close(file_handle);
     }
 #endif
-} // namespace ZQF::ZxJson
+} // namespace ZQF::ZxJsonPrivate
