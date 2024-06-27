@@ -41,9 +41,10 @@ auto main() -> int
     ZxJson::JObject_t jobj;
     jobj["age"] = 6;
     jobj["name"] = "xiao";
-    jobj["data_arrat"] = std::move(jarry);
+    jobj["my_array"] = jvalue_4;
+    jobj["data_array"] = std::move(jarry);
     assert(jobj["name"].Get<std::string_view>() == "xiao");
-    assert(jobj["data_arrat"][2].Get<std::string_view>() == "321");
+    assert(jobj["data_array"][2].Get<std::string_view>() == "321");
 }
 ```
 
