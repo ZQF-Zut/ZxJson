@@ -5,7 +5,7 @@
 
 namespace ZQF::ZxJson
 {
-    auto LoadViaMemory(std::span<char> spData) -> JValue
+    auto LoadViaMemory(std::span<const char> spData) -> JValue
     {
         JValue value;
         JParser{ spData }.Parse(value);

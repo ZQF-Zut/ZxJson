@@ -21,6 +21,7 @@ namespace ZQF::ZxJson
             return true;
         }
 
+        this->SkipWhite();
         this->ParseValue(rfJValue);
         return this->GetReadBytes() == this->TotalBytes();
     }
