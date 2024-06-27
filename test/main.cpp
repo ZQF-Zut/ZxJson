@@ -2,6 +2,7 @@
 #include <ZxJson/JParser.h>
 #include <ZxJson/JDoc.h>
 #include <ZxJson/JIO.h>
+#include <ZxJson/Platform.h>
 #include <cassert>
 #include <chrono>
 #include <cstring>
@@ -237,7 +238,7 @@ namespace
     }
 } // namespace
 
-#include <ZxJson/Platform.h>
+
 auto main() -> int
 {
     try
