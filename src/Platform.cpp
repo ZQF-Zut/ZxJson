@@ -5,7 +5,8 @@
 #ifdef _WIN32
 #include <Windows.h>
 #elif __linux__
-#include <cstdio>
+#include <fcntl.h>
+#include <unistd.h>
 #endif
 
 
@@ -65,40 +66,24 @@ namespace ZQF::ZxJson
 #else
     auto ReadAllBytes(const std::string_view msPath) -> std::pair<size_t, std::unique_ptr<char[]>>
     {
-        FILE* data_fp = fopen(msPath.data(), "rb");
-        if (data_fp == nullptr)
-        {
-            throw std::runtime_error(std::format("ZxJson::RreadAllBytes(): open file error!. msPath: {}", msPath));
-        }
-
-        size_t file_size{};
-        ::fseek(data_fp, 0, SEEK_END);
-        file_size = ::ftell(data_fp);
-        ::fseek(data_fp, 0, SEEK_SET);
-
+        const auto file_handle = ::open(msPath.data(), O_RDONLY, 0666);
+        if (file_handle == -1) { throw std::runtime_error(std::format("ZxJson::RreadAllBytes(): open file error!. msPath: {}", msPath)); }
+        const auto file_size = ::lseek(file_handle, 0, SEEK_END);
         auto buffer = std::make_unique_for_overwrite<char[]>(file_size);
-
-        ::fread(buffer.get(), 1, file_size, data_fp);
-        ::fclose(data_fp);
-
+        ::lseek(file_handle, 0, SEEK_SET);
+        ::read(file_handle, buffer.get(), file_size);
+        ::close(file_handle);
         return { file_size, std::move(buffer) };
     }
 
     auto WriteAllBytes(const std::string_view msPath, const std::span<char> spData, bool isForceCreate) -> void
     {
-        if (!isForceCreate)
-        {
-            // to do
-            throw std::runtime_error(std::format("ZxJson::WriteAllBytes(): file exists!. msPath: {}", msPath));
-        }
-
-        FILE* data_fp = fopen(msPath.data(), "wb");
-        if (data_fp == nullptr)
-        {
-            throw std::runtime_error(std::format("ZxJson::WriteAllBytes(): create file error!. msPath: {}", msPath));
-        }
-        ::fwrite(spData.data(), 1, spData.size_bytes(), data_fp);
-        ::fclose(data_fp);
+        constexpr auto create_always = O_CREAT | O_WRONLY | O_TRUNC;
+        constexpr auto create_new = O_CREAT | O_WRONLY | O_EXCL;
+        const auto file_handle = ::open(msPath.data(), isForceCreate ? create_always : create_new, 0666);  // NOLINT
+        if (file_handle == -1) { throw std::runtime_error(std::format("ZxJson::WriteAllBytes(): create file failed!", msPath)); }
+        ::write(file_handle, spData.data(), spData.size_bytes());
+        ::close(file_handle);
     }
 #endif
 } // namespace ZQF::ZxJson

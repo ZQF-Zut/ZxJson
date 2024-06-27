@@ -56,7 +56,7 @@ namespace ZQF
 namespace
 {
     // # Utils #
-    auto FetchFileData(const std::filesystem::path& phJson) -> std::string
+    [[maybe_unused]] auto FetchFileData(const std::filesystem::path& phJson) -> std::string
     {
         std::string data;
         std::ifstream ifs{ phJson };
@@ -68,7 +68,7 @@ namespace
     }
 
     // # Bench #
-    auto BenchJsonParser() -> void
+    [[maybe_unused]] auto BenchJsonParser() -> void
     {
         ZQF::ZxRecord record;
 
@@ -83,7 +83,7 @@ namespace
         record.Log();
     }
 
-    auto BenchJsonDumper() -> void
+    [[maybe_unused]] auto BenchJsonDumper() -> void
     {
         ZQF::ZxRecord record;
 
@@ -103,13 +103,13 @@ namespace
     }
 
     // # Test #
-    auto TestJsonParser() -> void
+    [[maybe_unused]] auto TestJsonParser() -> void
     {
         auto raw_data = ::FetchFileData(u8"1.json");
         auto json_value = ZQF::ZxJson::LoadViaMemory(raw_data);
     }
 
-    auto TestJsonDumper() -> void
+    [[maybe_unused]] auto TestJsonDumper() -> void
     {
         auto raw_data = ::FetchFileData(u8"1.json");
         auto json_value = ZQF::ZxJson::LoadViaMemory(raw_data);
@@ -123,7 +123,7 @@ namespace
         assert(data0.size());
     }
 
-    auto TestJsonValue() -> void
+    [[maybe_unused]] auto TestJsonValue() -> void
     {
         ZQF::ZxJson::JValue json_value;
         json_value = 1;
@@ -185,7 +185,7 @@ namespace
         [[maybe_unused]] int a = 0;
     }
 
-    auto TestJsonParseRegularEscape() -> bool
+    [[maybe_unused]] auto TestJsonParseRegularEscape() -> bool
     {
         constexpr std::string_view str0 = R"JSON("123\n666\r4565\tefwe\"fawfw\\afjasf\bsafasf\fawfasf\fasf\tFDaf\\123")JSON";
         constexpr std::string_view str1 = "123\n666\r4565\tefwe\"fawfw\\afjasf\bsafasf\fawfasf\fasf\tFDaf\\123";
@@ -216,7 +216,7 @@ namespace
         return true;
     }
 
-    auto TestJsonParseUnicodeEscape() -> bool
+    [[maybe_unused]] auto TestJsonParseUnicodeEscape() -> bool
     {
         constexpr std::string_view str0 = R"JSON("\u5FAE\u79ef\u5206\u57fa\u672c\u5b9a\u7406\uff08Fundamental Theorem of Calculus\uff09\u53c8\u79f0\u5fae\u79ef\u5206\u57fa\u672c\u516c\u5f0f\uff0c\u8bc1\u5b9e\u5fae\u5206\u548c\u79ef\u5206\u4e92\u4e3a\u9006\u8fd0\u7b97")JSON";
         constexpr std::string_view str1 = R"JSON(微积分基本定理（Fundamental Theorem of Calculus）又称微积分基本公式，证实微分和积分互为逆运算)JSON";
@@ -226,7 +226,7 @@ namespace
         return json_value.Get<std::string_view>() == str1;
     }
 
-    auto TestLoadStoreViaFile() -> void
+    [[maybe_unused]] auto TestLoadStoreViaFile() -> void
     {
         auto json_value = ZQF::ZxJson::LoadViaFile("1.json");
         if (json_value["hash"].Get<std::string_view>() != "7954b83446bdb525c23a8a6677c498e6")
@@ -237,7 +237,7 @@ namespace
     }
 } // namespace
 
-
+#include <ZxJson/Platform.h>
 auto main() -> int
 {
     try
