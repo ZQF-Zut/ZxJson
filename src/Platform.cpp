@@ -27,7 +27,9 @@ namespace ZQF::ZxJsonPrivate
     {
         const HANDLE hfile = ::CreateFileW(PathUtf8ToWide(msPath).get(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
         if (hfile == INVALID_HANDLE_VALUE) { throw std::runtime_error(std::format("ZxJson::RreadAllBytes(): open file error!. msPath: {}", msPath)); }
-        const auto file_size = static_cast<size_t>(::GetFileSize(hfile, nullptr));
+        LARGE_INTEGER file_size_large{};
+        (void)::GetFileSizeEx(hfile, &file_size_large);
+        const auto file_size = static_cast<size_t>(file_size_large.QuadPart);
         auto file_buffer = std::make_unique_for_overwrite<char[]>(file_size);
         DWORD read{};
         (void)::ReadFile(hfile, file_buffer.get(), static_cast<DWORD>(file_size), &read, nullptr);
