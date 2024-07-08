@@ -10,7 +10,13 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
     # LTCG
     cmake_policy(SET CMP0069 NEW) 
     set(CMAKE_POLICY_DEFAULT_CMP0069 NEW)
-    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE ON)
+    include(CheckIPOSupported)
+    check_ipo_supported(RESULT IPO_CHECK_RESULT OUTPUT output)
+    if(IPO_CHECK_RESULT)
+        set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
+    else()
+        message(WARNING "IPO is not supported: ${output}")
+    endif()
 
     # Static Library
     set(BUILD_SHARED_LIBS OFF)
@@ -30,5 +36,6 @@ if(MSVC)
         add_compile_options(/Gy)
         add_compile_options(/Zc:inline)
     endif()
+else()
+    add_compile_options(-Wextra)
 endif()
-
