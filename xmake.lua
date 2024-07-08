@@ -29,9 +29,9 @@ target("zxjson")
             add_rules("utils.symbols.export_all", {export_classes = true})
         end
     end
-    add_files("src/**.cpp")
-    add_includedirs("src", {public = true})
-    add_headerfiles("src/(**.h)")
+    add_files("src/src/ZxJson/**.cpp")
+    add_includedirs("src/include", {public = true})
+    add_headerfiles("src/include/(**.h)")
 
 target("zxjson-test")
     set_default(false)
