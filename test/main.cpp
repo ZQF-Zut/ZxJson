@@ -61,6 +61,7 @@ namespace
     {
         std::string data;
         std::ifstream ifs{ phJson };
+        if (!ifs) { throw std::runtime_error(std::format("open file error: {}", phJson.string())); }
         ifs.seekg(0, std::ios::end);
         data.reserve(ifs.tellg());
         ifs.seekg(0, std::ios::beg);
@@ -239,7 +240,7 @@ namespace
 } // namespace
 
 
-auto main() -> int
+auto main(void) -> int
 {
     try
     {
