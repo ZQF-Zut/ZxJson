@@ -6,7 +6,7 @@ project(ZxJson)
 
 # On Test Preset
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    include(CMakeConfig.cmake)
+    include(CMakeMycfg.cmake)
 endif()
 
 # Export Symbols
