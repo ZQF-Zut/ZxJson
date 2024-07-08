@@ -3,7 +3,7 @@ set_project("zxjson")
 set_xmakever("2.8.9")
 
 -- language
-set_warnings("all")
+set_warnings("allextra")
 set_languages("c++23")
 set_encodings("utf-8")
 
