@@ -30,8 +30,8 @@ target("zxjson")
         end
     end
     add_files("src/**.cpp")
-    add_includedirs("include", {public = true})
-    add_headerfiles("include/(**.h)")
+    add_includedirs("src", {public = true})
+    add_headerfiles("src/(**.h)")
 
 target("zxjson-test")
     set_default(false)

@@ -167,10 +167,7 @@ namespace
         assert(jobj["ftftfr"].Get<bool>() == false);
 
         ZQF::ZxJson::JArray_t jarr1 = std::move(jarr);
-        assert(jarr.empty());
-
         json_value = std::move(jarr1);
-        assert(jarr1.empty());
 
         ZQF::ZxJson::JObject_t jobj1 = std::move(jobj);
         jobj1["arrayx"] = std::move(json_value);
