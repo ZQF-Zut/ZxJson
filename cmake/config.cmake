@@ -25,6 +25,7 @@ if(MSVC)
     add_definitions(-DUNICODE -D_UNICODE)
     
     # Compile Flags
+    add_compile_options(/W4)
     if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
         add_compile_options(/Gy)
         add_compile_options(/Zc:inline)
