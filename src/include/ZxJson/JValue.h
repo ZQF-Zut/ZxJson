@@ -10,6 +10,26 @@
 
 namespace ZQF::ZxJson
 {
+    // https://www.cppstories.com/2021/heterogeneous-access-cpp20/
+    struct string_hash
+    {
+        using is_transparent = void;
+        [[nodiscard]] size_t operator()(const char* cpKey) const
+        {
+            return std::hash<std::string_view>{}(cpKey);
+        }
+
+        [[nodiscard]] size_t operator()(const std::string_view msKey) const
+        {
+            return std::hash<std::string_view>{}(msKey);
+        }
+
+        [[nodiscard]] size_t operator()(const std::string& msKey) const
+        {
+            return std::hash<std::string>{}(msKey);
+        }
+    };
+
     class JValue;
     using JNull_t = std::monostate;
     using JBool_t = bool;
@@ -19,7 +39,7 @@ namespace ZQF::ZxJson
     using JString_t = std::string;
     using JStringView_t = std::string_view;
     using JArray_t = std::vector<JValue>;
-    using JObject_t = std::unordered_map<std::string, JValue>;
+    using JObject_t = std::unordered_map<std::string, JValue, string_hash, std::equal_to<>>;
     using JDataType = std::variant<JNull_t, JBool_t, JInt_t, JDouble_t, std::unique_ptr<JString_t>, std::unique_ptr<JArray_t>, std::unique_ptr<JObject_t>>;
 
     class JValue // NOLINT
@@ -187,13 +207,9 @@ namespace ZQF::ZxJson
     {
         using T_decay = std::decay_t<decltype(rfData)>;
 
-        if constexpr (std::is_bounded_array_v<std::remove_cvref_t<T>> || std::is_same_v<T_decay, std::string>)
+        if constexpr (std::is_bounded_array_v<std::remove_cvref_t<T>> || std::is_same_v<T_decay, std::string> || std::is_same_v<T_decay, std::string_view>)
         {
             return this->Get<JObject_t&>()[rfData];
-        }
-        else if constexpr (std::is_same_v<T_decay, std::string_view>)
-        {
-            return this->Get<JObject_t&>()[std::string(rfData)];
         }
         else if constexpr (std::is_integral_v<T_decay>)
         {

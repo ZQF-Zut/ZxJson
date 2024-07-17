@@ -74,7 +74,7 @@ namespace
     {
         ZQF::ZxRecord record;
 
-        auto raw_data = ::FetchFileData(u8"1.json");
+        auto raw_data = ::FetchFileData(u8"1_あてな　１.txt.json");
         for (size_t i = 0; i < 200; i++)
         {
             record.Beg();
@@ -89,7 +89,7 @@ namespace
     {
         ZQF::ZxRecord record;
 
-        ZQF::ZxJson::JDoc jdoc{ "1.json" };
+        ZQF::ZxJson::JDoc jdoc{ "1_あてな　１.txt.json" };
         auto& json_value = jdoc.GetJValue();
         for (size_t i = 0; i < 200; i++)
         {
