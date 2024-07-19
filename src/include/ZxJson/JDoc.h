@@ -25,6 +25,6 @@ namespace ZQF::ZxJson
         auto LoadViaMemory(std::span<char> spData) -> bool;
         auto LoadViaFile(const std::string_view msPath) -> bool;
         auto StoreViaMemory(bool isFormat) const->std::string;
-        auto StoreViaFile(const std::string_view msPath, bool isFormat, bool isForceSave) const -> void;
+        auto StoreViaFile(const std::string_view msPath, const bool isFormat, const bool isForceSave) const -> void;
     };
 } // namespace ZQF::ZxJson

@@ -50,7 +50,7 @@ namespace ZQF::ZxJson
         return json;
     }
 
-    auto JDoc::StoreViaFile(const std::string_view msPath, bool isFormat, bool isForceSave) const -> void
+    auto JDoc::StoreViaFile(const std::string_view msPath, const bool isFormat, const bool isForceSave) const -> void
     {
         auto json_str = this->StoreViaMemory(isFormat);
         Private::WriteAllBytes(msPath, std::span{ json_str }, isForceSave);

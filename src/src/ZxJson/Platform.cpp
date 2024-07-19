@@ -16,37 +16,37 @@ namespace ZQF::ZxJson::Private
 #ifdef _WIN32
     static auto PathUtf8ToWide(const std::string_view msPath) -> std::unique_ptr<wchar_t[]>
     {
-        const auto char_count = static_cast<size_t>(::MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, msPath.data(), static_cast<int>(msPath.size()), nullptr, 0));
-        auto buffer = std::make_unique_for_overwrite<wchar_t[]>(char_count + 1);
-        const auto char_count_real = static_cast<size_t>(::MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, msPath.data(), static_cast<int>(msPath.size()), buffer.get(), static_cast<int>(char_count)));
+        const std::size_t buffer_max_chars = (msPath.size() * sizeof(char) + 1) * 2;
+        auto buffer = std::make_unique_for_overwrite<wchar_t[]>(buffer_max_chars);
+        const auto char_count_real = static_cast<std::size_t>(::MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, msPath.data(), static_cast<int>(msPath.size()), buffer.get(), static_cast<int>(buffer_max_chars)));
         buffer[char_count_real] = {};
-        return std::move(buffer);
+        return { std::move(buffer) };
     }
 
-    auto ReadAllBytes(const std::string_view msPath) -> std::pair<size_t, std::unique_ptr<char[]>>
+    auto ReadAllBytes(const std::string_view msPath) -> std::pair<std::size_t, std::unique_ptr<char[]>>
     {
-        const HANDLE hfile = ::CreateFileW(PathUtf8ToWide(msPath).get(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+        const auto hfile = ::CreateFileW(PathUtf8ToWide(msPath).get(), GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
         if (hfile == INVALID_HANDLE_VALUE) { throw std::runtime_error(std::format("ZxJson::RreadAllBytes(): open file error!. msPath: {}", msPath)); }
         LARGE_INTEGER file_size_large{};
         (void)::GetFileSizeEx(hfile, &file_size_large);
-        const auto file_size = static_cast<size_t>(file_size_large.QuadPart);
+        const auto file_size = static_cast<std::size_t>(file_size_large.QuadPart);
         auto file_buffer = std::make_unique_for_overwrite<char[]>(file_size);
         DWORD read{};
         (void)::ReadFile(hfile, file_buffer.get(), static_cast<DWORD>(file_size), &read, nullptr);
-        ::CloseHandle(hfile);
+        (void)::CloseHandle(hfile);
         return { file_size, std::move(file_buffer) };
     }
 
-    auto WriteAllBytes(const std::string_view msPath, const std::span<char> spData, bool isForceCreate) -> void
+    auto WriteAllBytes(const std::string_view msPath, const std::span<const char> spData, const bool isForceCreate) -> void
     {
-        const HANDLE hfile = ::CreateFileW(PathUtf8ToWide(msPath).get(), GENERIC_WRITE, FILE_SHARE_READ, nullptr, isForceCreate ? CREATE_ALWAYS : CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr); // NOLINT
+        const auto hfile = ::CreateFileW(PathUtf8ToWide(msPath).get(), GENERIC_WRITE, FILE_SHARE_READ, nullptr, isForceCreate ? CREATE_ALWAYS : CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr); // NOLINT
         if (hfile == INVALID_HANDLE_VALUE) { throw std::runtime_error(std::format("ZxJson::WriteAllBytes(): create file error!. msPath: {}", msPath)); }
         DWORD write{};
         (void)::WriteFile(hfile, spData.data(), static_cast<DWORD>(spData.size_bytes()), &write, nullptr);
-        ::CloseHandle(hfile);
+        (void)::CloseHandle(hfile);
     }
 #else
-    auto ReadAllBytes(const std::string_view msPath) -> std::pair<size_t, std::unique_ptr<char[]>>
+    auto ReadAllBytes(const std::string_view msPath) -> std::pair<std::size_t, std::unique_ptr<char[]>>
     {
         const auto file_handle = ::open(msPath.data(), O_RDONLY, 0666);
         if (file_handle == -1) { throw std::runtime_error(std::format("ZxJson::RreadAllBytes(): open file error!. msPath: {}", msPath)); }
@@ -58,7 +58,7 @@ namespace ZQF::ZxJson::Private
         return { file_size, std::move(buffer) };
     }
 
-    auto WriteAllBytes(const std::string_view msPath, const std::span<char> spData, bool isForceCreate) -> void
+    auto WriteAllBytes(const std::string_view msPath, const std::span<const char> spData, const bool isForceCreate) -> void
     {
         constexpr auto create_always = O_CREAT | O_WRONLY | O_TRUNC;
         constexpr auto create_new = O_CREAT | O_WRONLY | O_EXCL;
