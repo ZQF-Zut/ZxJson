@@ -55,13 +55,9 @@ namespace ZQF::ZxJson
         auto operator=(JValue&& rfJValue) noexcept -> JValue&;
 
         template <class T>
-        JValue(const T& rfData);
+        JValue(T&& rfData);
         template <class T>
-        JValue(T&& rfData) noexcept;
-        template <class T>
-        auto operator=(const T& rfData)->JValue&;
-        template <class T>
-        auto operator=(T&& rfData) noexcept -> JValue&;
+        auto operator=(T&& rfData) -> JValue&;
         template <class T>
         auto operator[](T&& rfData)->JValue&;
 
@@ -121,19 +117,13 @@ namespace ZQF::ZxJson
     };
 
     template <class T>
-    inline JValue::JValue(const T& rfData)
+    inline JValue::JValue(T&& rfData)
     {
-        this->operator= <T>(rfData);
+        this->operator=(std::forward<T>(rfData));
     }
 
     template <class T>
-    inline JValue::JValue(T&& rfData) noexcept
-    {
-        this->operator= <T>(std::forward<T>(rfData));
-    }
-
-    template <class T>
-    auto JValue::operator=(const T& rfData) -> JValue&
+    auto JValue::operator=(T&& rfData) -> JValue& // NOLINT
     {
         using T_decay = std::decay_t<decltype(rfData)>;
 
@@ -141,50 +131,21 @@ namespace ZQF::ZxJson
         {
             m_Data = JNull_t{};
         }
-        else if constexpr (std::is_same_v<T_decay, JFloat_t> || std::is_same_v<T_decay, JDouble_t> || std::is_same_v<T_decay, JBool_t>)
+        else if constexpr (std::is_floating_point_v<T_decay> || std::is_same_v<T_decay, JBool_t>)
         {
             m_Data = rfData;
+        }
+        else if constexpr (std::is_same_v<T_decay, JValue>)
+        {
+            this->operator=(std::forward<T>(rfData));
         }
         else if constexpr (std::is_integral_v<T_decay>)
         {
             m_Data = static_cast<JInt_t>(rfData);
         }
-        else if constexpr (std::is_bounded_array_v<T>)
+        else if constexpr (std::is_bounded_array_v<std::remove_cvref_t<T>>)
         {
             m_Data = std::make_unique<JString_t>(rfData);
-        }
-        else if constexpr (std::is_same_v<T_decay, JStringView_t>)
-        {
-            m_Data = std::make_unique<JString_t>(rfData.data(), rfData.size());
-        }
-        else if constexpr (std::is_same_v<T_decay, JString_t> || std::is_same_v<T_decay, JArray_t> || std::is_same_v<T_decay, JObject_t>)
-        {
-            m_Data = std::make_unique<T_decay>(rfData);
-        }
-        else
-        {
-            static_assert(false, "ZxJson::JValue::operator=<>(): error type!");
-        }
-
-        return *this;
-    }
-
-    template <class T>
-    auto JValue::operator=(T&& rfData) noexcept -> JValue& // NOLINT
-    {
-        using T_decay = std::decay_t<decltype(rfData)>;
-
-        if constexpr (std::is_same_v<T_decay, JNull_t>)
-        {
-            m_Data = JNull_t{};
-        }
-        else if constexpr (std::is_same_v<T_decay, JFloat_t> || std::is_same_v<T_decay, JDouble_t> || std::is_same_v<T_decay, JBool_t>)
-        {
-            m_Data = rfData;
-        }
-        else if constexpr (std::is_integral_v<T_decay>)
-        {
-            m_Data = static_cast<JInt_t>(rfData);
         }
         else if constexpr (std::is_same_v<T_decay, std::string_view>)
         {
@@ -192,7 +153,7 @@ namespace ZQF::ZxJson
         }
         else if constexpr (std::is_same_v<T_decay, JString_t> || std::is_same_v<T_decay, JArray_t> || std::is_same_v<T_decay, JObject_t>)
         {
-            m_Data = std::make_unique<T_decay>(std::move(rfData));
+            m_Data = std::make_unique<T_decay>(std::forward<T>(rfData));
         }
         else
         {
@@ -205,19 +166,13 @@ namespace ZQF::ZxJson
     template <class T>
     inline auto JValue::operator[](T&& rfData) -> JValue& // NOLINT
     {
-        using T_decay = std::decay_t<decltype(rfData)>;
-
-        if constexpr (std::is_bounded_array_v<std::remove_cvref_t<T>> || std::is_same_v<T_decay, std::string> || std::is_same_v<T_decay, std::string_view>)
+        if constexpr (std::is_integral_v<T>)
         {
-            return this->Get<JObject_t&>()[rfData];
-        }
-        else if constexpr (std::is_integral_v<T_decay>)
-        {
-            return this->Get<JArray_t&>()[rfData];
+            return this->Get<JArray_t&>()[std::forward<T>(rfData)];
         }
         else
         {
-            static_assert(false, "ZxJson::JValue::operator[]<T>: error type");
+            return this->Get<JObject_t&>()[std::forward<T>(rfData)];
         }
     }
 

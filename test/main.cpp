@@ -138,10 +138,19 @@ namespace
         assert(json_value.Get<std::string>() == "5666");
         assert(json_value.Get<std::string&>() == "5666");
 
+        std::string txt_0 = "2352623";
+        const std::string txt_1 = "asgfjisadf";
+        json_value = txt_0;
+        json_value = txt_1;
+        ZQF::ZxJson::JValue val_0 = txt_0;
+        ZQF::ZxJson::JValue val_1 = txt_1;
+        ZQF::ZxJson::JValue val_2 = std::string{"13124124"};
+
+
         ZQF::ZxJson::JValue jv1 = std::move(json_value);
         assert(json_value.Check<ZQF::ZxJson::JNull_t>());
-        assert(jv1.Get<std::string>() == "5666");
-        assert(jv1.Get<std::string&>() == "5666");
+        assert(jv1.Get<std::string>() == "asgfjisadf");
+        assert(jv1.Get<std::string&>() == "asgfjisadf");
 
         ZQF::ZxJson::JArray_t jarr;
         jarr.emplace_back(1);
@@ -244,11 +253,11 @@ auto main(void) -> int
         // TestLoadStoreViaFile();
         // TestJsonParser();
         // TestJsonDumper();
-        // TestJsonValue();
+        TestJsonValue();
         // TestJsonParseRegularEscape();
         // TestJsonParseUnicodeEscape();
         // BenchJsonDumper();
-        BenchJsonParser();
+        // BenchJsonParser();
     }
     catch (const std::exception& err)
     {
