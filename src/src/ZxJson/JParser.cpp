@@ -108,7 +108,7 @@ namespace ZQF::ZxJson
     {
         assert(this->CurToken() == '[');
 
-        auto& jarry = rfJValue.Sure<JArray_t&>();
+        auto& jarry = rfJValue.ToArray();
         this->AddReadBytes();
 
         while (this->NextToken() != ']')
@@ -125,7 +125,7 @@ namespace ZQF::ZxJson
     {
         assert(this->CurToken() == '{');
 
-        auto& obj = rfJValue.Sure<JObject_t&>();
+        auto& obj = rfJValue.ToObject();
         this->AddReadBytes();
 
         std::string_view key;

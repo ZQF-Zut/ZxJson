@@ -24,12 +24,12 @@ namespace ZQF::ZxJson
 
     auto JDoc::GetJArray() -> JArray_t&
     {
-        return m_JValue.Sure<JArray_t&>();
+        return m_JValue.ToArray();
     }
 
     auto JDoc::GetJObject() -> JObject_t&
     {
-        return m_JValue.Sure<JObject_t&>();
+        return m_JValue.ToObject();
     }
 
     auto JDoc::LoadViaMemory(std::span<char> spData) -> bool
@@ -45,9 +45,7 @@ namespace ZQF::ZxJson
 
     auto JDoc::StoreViaMemory(bool isFormat) const -> std::string
     {
-        std::string json;
-        m_JValue.Dump(json, isFormat, 0);
-        return json;
+        return m_JValue.Dump(isFormat);
     }
 
     auto JDoc::StoreViaFile(const std::string_view msPath, const bool isFormat, const bool isForceSave) const -> void

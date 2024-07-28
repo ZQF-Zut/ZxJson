@@ -3,7 +3,14 @@
 
 namespace ZQF::ZxJson
 {
-    auto JValue::Dump(std::string& wsText, bool isFormat, size_t nIndent) const -> void // NOLINT
+    auto JValue::Dump(const bool isFormat) const -> std::string
+    {
+        std::string dump;
+        this->Dump(dump, isFormat, 0);
+        return dump;
+    }
+
+    auto JValue::Dump(std::string& wsText, const bool isFormat, std::size_t nIndent) const -> void
     {
         if (std::holds_alternative<JNull_t>(m_Data))
         {
