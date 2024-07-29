@@ -61,7 +61,7 @@ namespace ZQF::ZxJson
         template <>        auto operator=(JValue&& rfJValue) noexcept -> JValue&;
 
         template <class T> auto operator[](T&& rfData) -> JValue&;
-
+        template <class T> auto operator[](T&& rfData) const -> const JValue&;
 
     public:
         auto Move(JValue&& rfJValue) -> JValue&;
@@ -75,13 +75,17 @@ namespace ZQF::ZxJson
         template<class T = std::size_t> auto GetNum() const->T;
         template<class T = std::double_t> auto GetFloat() const->T;
         auto GetBool() const -> bool;
-        auto GetStrV() const-> std::string_view;
+        auto GetStrView() const-> std::string_view;
         auto GetStr() -> std::string&;
         auto GetStr() const -> const std::string&;
         auto GetArray() -> JArray_t&;
         auto GetArray() const -> const JArray_t&;
         auto GetObject() -> JObject_t&;
         auto GetObject() const -> const JObject_t&;
+
+    public:
+        template <class T> auto At(T&& rfKeyorIndex) -> JValue&;
+        template <class T> auto At(T&& rfKeyorIndex) const -> const JValue&;
         
     public:
         auto Clear() -> void;
@@ -156,6 +160,19 @@ namespace ZQF::ZxJson
         else
         {
             return this->GetObject()[std::forward<T>(rfData)];
+        }
+    }
+
+    template <class T>
+    inline auto JValue::operator[](T&& rfData) const -> const JValue&
+    {
+        if constexpr (std::is_integral_v<T>)
+        {
+            return this->GetArray()[std::forward<T>(rfData)];
+        }
+        else
+        {
+            static_assert(false, "ZxJson::JValue::operator[]() const: error type.");
         }
     }
 
@@ -240,63 +257,121 @@ namespace ZQF::ZxJson
 
     inline auto JValue::GetBool() const -> bool
     {
-        assert(std::holds_alternative<JBool_t>(m_Data));
+        assert(this->Check<JBool_t>());
         return std::get<JBool_t>(m_Data);
     }
 
     template<class T>
     inline auto JValue::GetNum() const -> T
     {
-        assert(std::holds_alternative<JInt_t>(m_Data));
+        assert(this->Check<JInt_t>());
         return static_cast<T>(std::get<JInt_t>(m_Data));
     }
 
     template<class T>
     inline auto JValue::GetFloat() const -> T
     {
-        assert(std::holds_alternative<JDouble_t>(m_Data));
+        assert(this->Check<JDouble_t>());
         return static_cast<T>(std::get<JDouble_t>(m_Data));
     }
 
-    inline auto JValue::GetStrV() const -> std::string_view
+    inline auto JValue::GetStrView() const -> std::string_view
     {
         return this->GetStr();
     }
 
     inline auto JValue::GetStr() -> std::string&
     {
-        assert(std::holds_alternative<std::unique_ptr<JString_t>>(m_Data));
+        assert(this->Check<JString_t>());
         return *std::get<std::unique_ptr<JString_t>>(m_Data);
     }
 
     inline auto JValue::GetStr() const -> const std::string&
     {
-        assert(std::holds_alternative<std::unique_ptr<JString_t>>(m_Data));
+        assert(this->Check<JString_t>());
         return *std::get<std::unique_ptr<JString_t>>(m_Data);
     }
 
     inline auto JValue::GetArray() -> JArray_t&
     {
-        assert(std::holds_alternative<std::unique_ptr<JArray_t>>(m_Data));
+        assert(this->Check<JArray_t>());
         return *std::get<std::unique_ptr<JArray_t>>(m_Data);
     }
 
     inline auto JValue::GetArray() const -> const JArray_t&
     {
-        assert(std::holds_alternative<std::unique_ptr<JArray_t>>(m_Data));
+        assert(this->Check<JArray_t>());
         return *std::get<std::unique_ptr<JArray_t>>(m_Data);
     }
 
     inline auto JValue::GetObject() -> JObject_t&
     {
-        assert(std::holds_alternative<std::unique_ptr<JObject_t>>(m_Data));
+        assert(this->Check<JObject_t>());
         return *std::get<std::unique_ptr<JObject_t>>(m_Data);
     }
 
     inline auto JValue::GetObject() const -> const JObject_t&
     {
-        assert(std::holds_alternative<std::unique_ptr<JObject_t>>(m_Data));
+        assert(this->Check<JObject_t>());
         return *std::get<std::unique_ptr<JObject_t>>(m_Data);
+    }
+
+    template <class T>
+    inline auto JValue::At(T&& rfKeyorIndex) -> JValue&
+    {
+        if constexpr (std::is_integral_v<T>)
+        {
+            if (!this->Check<JArray_t>()) { throw std::runtime_error("ZxJson::JValue::At<>(): not a array type!"); }
+
+            auto& jarray = this->GetArray();
+            if (jarray.size() > rfKeyorIndex)
+            {
+                return jarray[rfKeyorIndex];
+            }
+
+            throw std::runtime_error("ZxJson::JValue::QueryKey<>(): out of idx!");
+        }
+        else
+        {
+            if (!this->Check<JObject_t>()) { throw std::runtime_error("ZxJson::JValue::At<>(): not a object type!"); }
+
+            auto& obj = this->GetObject();
+            if (auto ite = obj.find(std::forward<T>(rfKeyorIndex));ite != obj.end())
+            {
+                return ite->second;
+            }
+
+            throw std::runtime_error("ZxJson::JValue::QueryKey<>(): not find key!");
+        }
+    }
+
+    template <class T>
+    inline auto JValue::At(T&& rfKeyorIndex) const -> const JValue&
+    {
+        if constexpr (std::is_integral_v<T>)
+        {
+            if (!this->Check<JArray_t>()) { throw std::runtime_error("ZxJson::JValue::At<>() const: not a array type!"); }
+
+            const auto& jarray = this->GetArray();
+            if (jarray.size() > rfKeyorIndex)
+            {
+                return jarray[rfKeyorIndex];
+            }
+
+            throw std::runtime_error("ZxJson::JValue::QueryKey<>(): not find idx!");
+        }
+        else
+        {
+            if (!this->Check<JObject_t>()) { throw std::runtime_error("ZxJson::JValue::At<>() const: not a object type!"); }
+
+            const auto& obj = this->GetObject();
+            if (const auto ite = obj.find(std::forward<T>(rfKeyorIndex));ite != obj.end())
+            {
+                return ite->second;
+            }
+
+            throw std::runtime_error("ZxJson::JValue::QueryKey<>() const: not find key!");
+        }
     }
 
     template <class T>
@@ -323,30 +398,30 @@ namespace ZQF::ZxJson
 
     inline auto JValue::ToArray() -> JArray_t&
     {
-        if (std::holds_alternative<JNull_t>(m_Data))
+        if (this->Check<JNull_t>())
         {
             m_Data = std::make_unique<JArray_t>();
         }
-        else if (!std::holds_alternative<std::unique_ptr<JArray_t>>(m_Data))
+        else if (!this->Check<JArray_t>())
         {
             throw std::runtime_error("ZxJson::JValue::ToArray<>(): error!");
         }
 
-        return *std::get<std::unique_ptr<JArray_t>>(m_Data);
+        return this->GetArray();
     }
 
     inline auto JValue::ToObject() -> JObject_t&
     {
-        if (std::holds_alternative<JNull_t>(m_Data))
+        if (this->Check<JNull_t>())
         {
             m_Data = std::make_unique<JObject_t>();
         }
-        else if (!std::holds_alternative<std::unique_ptr<JObject_t>>(m_Data))
+        else if (!this->Check<JObject_t>())
         {
             throw std::runtime_error("ZxJson::JValue::ToObject<>(): error!");
         }
 
-        return *std::get<std::unique_ptr<JObject_t>>(m_Data);
+        return this->GetObject();
     }
 
 } // namespace ZQF::ZxJson
