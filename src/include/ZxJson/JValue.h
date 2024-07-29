@@ -7,6 +7,7 @@
 #include <variant>
 #include <vector>
 #include <optional>
+#include <cmath>
 
 
 namespace ZQF::ZxJson
@@ -52,13 +53,13 @@ namespace ZQF::ZxJson
         JValue();
         JValue(const JValue& rfJValue);
         template <class T> JValue(T&& rfData);
-        template <>        JValue(JValue& rfJValue);
-        template <>        JValue(JValue&& rfJValue) noexcept;
+        JValue(JValue& rfJValue);
+        JValue(JValue&& rfJValue) noexcept;
 
         auto operator=(const JValue& rfJValue) -> JValue&;
         template <class T> auto operator=(T&& rfData) -> JValue&;
-        template <>        auto operator=(JValue& rfJValue) -> JValue&;
-        template <>        auto operator=(JValue&& rfJValue) noexcept -> JValue&;
+        auto operator=(JValue& rfJValue) -> JValue&;
+        auto operator=(JValue&& rfJValue) noexcept -> JValue&;
 
         template <class T> auto operator[](T&& rfData) -> JValue&;
         template <class T> auto operator[](T&& rfData) const -> const JValue&;
@@ -109,7 +110,6 @@ namespace ZQF::ZxJson
         this->Assign<T>(std::forward<T>(rfData));
     }
 
-    template <>
     inline JValue::JValue(JValue& rfJValue)
     {
         this->Copy(rfJValue);
@@ -120,7 +120,6 @@ namespace ZQF::ZxJson
         this->Copy(rfJValue);
     }
 
-    template <>
     inline JValue::JValue(JValue&& rfJValue) noexcept
     {
         this->Move(std::move(rfJValue));
@@ -132,7 +131,6 @@ namespace ZQF::ZxJson
         return this->Assign<T>(std::forward<T>(rfData));
     }
 
-    template <>
     inline auto JValue::operator=(JValue& rfJValue) -> JValue&
     {
         return this->Copy(rfJValue);
@@ -143,7 +141,6 @@ namespace ZQF::ZxJson
         return this->Copy(rfJValue);
     }
 
-    template <>
     inline auto JValue::operator=(JValue&& rfJValue) noexcept -> JValue&
     {
         return this->Move(std::move(rfJValue));
