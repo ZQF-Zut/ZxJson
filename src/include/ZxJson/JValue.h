@@ -321,9 +321,9 @@ namespace ZQF::ZxJson
             if (!this->Check<JArray_t>()) { throw std::runtime_error("ZxJson::JValue::At<>(): not a array type!"); }
 
             auto& jarray = this->GetArray();
-            if (jarray.size() > rfKeyorIndex)
+            if (jarray.size() > static_cast<std::size_t>(rfKeyorIndex))
             {
-                return jarray[rfKeyorIndex];
+                return jarray[static_cast<std::size_t>(rfKeyorIndex)];
             }
 
             throw std::runtime_error("ZxJson::JValue::QueryKey<>(): out of idx!");
@@ -350,9 +350,9 @@ namespace ZQF::ZxJson
             if (!this->Check<JArray_t>()) { throw std::runtime_error("ZxJson::JValue::At<>() const: not a array type!"); }
 
             const auto& jarray = this->GetArray();
-            if (jarray.size() > rfKeyorIndex)
+            if (jarray.size() > static_cast<std::size_t>(rfKeyorIndex))
             {
-                return jarray[rfKeyorIndex];
+                return jarray[static_cast<std::size_t>(rfKeyorIndex)];
             }
 
             throw std::runtime_error("ZxJson::JValue::QueryKey<>(): not find idx!");
