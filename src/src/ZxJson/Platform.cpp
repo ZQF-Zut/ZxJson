@@ -20,7 +20,7 @@ namespace ZQF::ZxJson::Private
         auto buffer = std::make_unique_for_overwrite<wchar_t[]>(buffer_max_chars);
         const auto char_count_real = static_cast<std::size_t>(::MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, msPath.data(), static_cast<int>(msPath.size()), buffer.get(), static_cast<int>(buffer_max_chars)));
         buffer[char_count_real] = {};
-        return { std::move(buffer) };
+        return std::unique_ptr<wchar_t[]>{ std::move(buffer) };
     }
 
     auto ReadAllBytes(const std::string_view msPath) -> std::pair<std::size_t, std::unique_ptr<char[]>>
@@ -34,7 +34,7 @@ namespace ZQF::ZxJson::Private
         DWORD read{};
         (void)::ReadFile(hfile, file_buffer.get(), static_cast<DWORD>(file_size), &read, nullptr);
         (void)::CloseHandle(hfile);
-        return { file_size, std::move(file_buffer) };
+        return { file_size, std::unique_ptr<char[]>{ std::move(file_buffer) } };
     }
 
     auto WriteAllBytes(const std::string_view msPath, const std::span<const char> spData, const bool isForceCreate) -> void
@@ -55,7 +55,7 @@ namespace ZQF::ZxJson::Private
         ::lseek(file_handle, 0, SEEK_SET);
         ::read(file_handle, buffer.get(), file_size);
         ::close(file_handle);
-        return { file_size, std::move(buffer) };
+        return { file_size, std::unique_ptr<char[]>{ std::move(buffer) } };
     }
 
     auto WriteAllBytes(const std::string_view msPath, const std::span<const char> spData, const bool isForceCreate) -> void
