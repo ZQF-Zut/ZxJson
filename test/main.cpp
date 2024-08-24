@@ -524,11 +524,11 @@ auto main(void) -> int
         // TestLoadStoreViaFile();
         // TestJsonParser();
         // TestJsonDumper();
-        TestJsonValue();
+        // TestJsonValue();
         // TestJsonParseRegularEscape();
         // TestJsonParseUnicodeEscape();
         // BenchJsonDumper();
-        // BenchJsonParser();
+        BenchJsonParser();
     }
     catch (const std::exception& err)
     {

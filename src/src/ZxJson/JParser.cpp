@@ -17,7 +17,7 @@ namespace ZQF::ZxJson
     {
         if (m_spJson.empty())
         {
-            rfJValue = JNull_t{};
+            rfJValue.Assign(JNull_t{});
             return true;
         }
 
@@ -50,13 +50,10 @@ namespace ZQF::ZxJson
     {
         while (true)
         {
-            char tmp_char = this->CurToken();
+            const auto tmp_char = this->CurToken();
             switch (tmp_char)
             {
-            case '\t':
-            case '\n':
-            case '\r':
-            case ' ':
+            case '\t': case '\n': case '\r': case ' ':
                 this->AddReadBytes();
                 continue;
             }
@@ -66,36 +63,20 @@ namespace ZQF::ZxJson
 
     auto JParser::NextToken() -> char
     {
-        char tmp_char = this->SkipWhite();
+        const auto tmp_char = this->SkipWhite();
 
         switch (tmp_char)
         {
-        case '{':
-        case '}':
-        case '[':
-        case ']':
-        case '"':
-        case ':':
-        case 'n':
-        case 't':
-        case 'f':
-        case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-        case '-':
+        case '{': case '}': case '[': case ']':
+        case '"': case ':': case 'n': case 't':
+        case 'f': case '0': case '1': case '2':
+        case '3': case '4': case '5': case '6':
+        case '7': case '8': case '9': case '-':
             return tmp_char;
         case ',':
             this->AddReadBytes();
             return this->NextToken();
-        default:
-            throw std::runtime_error("ZxJson::JParser::NextToken(): not find token");
+        default: throw std::runtime_error("ZxJson::JParser::NextToken(): not find token -> " + tmp_char);
         }
     }
 
@@ -155,9 +136,9 @@ namespace ZQF::ZxJson
 
                 if (const auto [ite, is_insert_key] = obj.try_emplace({ key.data(), key.size() }); !is_insert_key)
                 {
-                    throw std::runtime_error("ZxJson::JParser::ParseObject: same key!");
+                    throw std::runtime_error(std::string{ "ZxJson::JParser::ParseObject(): same key! -> " }.append(key));
                 }
-                else // NOLINT
+                else
                 {
                     ite->second = std::move(value);
                 }
@@ -181,11 +162,11 @@ namespace ZQF::ZxJson
     {
         char* end = nullptr;
         const char* beg = this->CurPtr();
-        const double_t num_org = ::strtod(beg, &end);
+        const auto num_org = ::strtod(beg, &end);
         this->AddReadBytes(end - beg);
 
-        const uint64_t num_int = (uint64_t)(num_org);
-        (num_org == (double_t)(num_int)) ? (rfJValue = num_int) : (rfJValue = num_org);
+        const auto num_int = static_cast<uint64_t>(num_org);
+        (num_org == static_cast<double>(num_int)) ? rfJValue.Assign(num_int) : rfJValue.Assign(num_org);
     }
 
     auto JParser::ParseString(JValue& rfJValue) -> void // NOLINT
@@ -194,12 +175,10 @@ namespace ZQF::ZxJson
             auto fn_read_code_point = [this]() -> uint16_t {
                 auto fn_char2num = [](char cChar) -> uint8_t {
                     auto char_v = static_cast<uint8_t>(cChar);
-                    // NOLINTBEGIN
                     if (char_v >= 0x61 && char_v <= 0x7a) { return char_v - 0x57; }      // a-z
                     else if (char_v >= 0x41 && char_v <= 0x5A) { return char_v - 0x37; } // A-Z
                     else if (char_v >= 0x30 && char_v <= 0x39) { return char_v - 0x30; } // 0-9
-                    else { throw std::runtime_error("ZxJson::JParser::DecodeUnicode:: read code point error!"); }
-                    // NOLINTEND
+                    else { throw std::runtime_error("ZxJson::JParser::ParseString(): read code point error!"); }
                     };
 
                 const char* code_point_str_ptr = this->CurPtr();
@@ -225,7 +204,7 @@ namespace ZQF::ZxJson
                 }
                 else
                 {
-                    throw std::runtime_error("ZxJson::JParser::DecodeUnicode: surrogate pair trailing error!");
+                    throw std::runtime_error("ZxJson::JParser::ParseString(): surrogate pair trailing error!");
                 }
 
                 // read trailing
@@ -236,7 +215,7 @@ namespace ZQF::ZxJson
                 }
                 else
                 {
-                    throw std::runtime_error("ZxJson::JParser::DecodeUnicode:: surrogate pair trailing range error!");
+                    throw std::runtime_error("ZxJson::JParser::ParseString(): surrogate pair trailing range error! -> " + std::to_string(code_point_trailing));
                 }
             }
 
@@ -265,7 +244,7 @@ namespace ZQF::ZxJson
             }
             else
             {
-                throw std::runtime_error("ZxJson::JParser::DecodeUnicode:: encode utf8 error!");
+                throw std::runtime_error("ZxJson::JParser::ParseString(): encode utf8 error! -> " + std::to_string(code_point));
             }
             };
 
@@ -281,32 +260,15 @@ namespace ZQF::ZxJson
             {
                 switch (this->CurToken())
                 {
-                case '\\':
-                    token = '\\';
-                    break;
-                case '"':
-                    token = '\"';
-                    break;
-                case 'b':
-                    token = '\b';
-                    break;
-                case 'f':
-                    token = '\f';
-                    break;
-                case 'n':
-                    token = '\n';
-                    break;
-                case 'r':
-                    token = '\r';
-                    break;
-                case 't':
-                    token = '\t';
-                    break;
-                case 'u':
-                    token = 'u';
-                    break;
-                default:
-                    throw std::runtime_error("ZxJson::JParser::ParseString: unknown escape character!");
+                case '\\': token = '\\'; break;
+                case '"': token = '\"'; break;
+                case 'b': token = '\b'; break;
+                case 'f': token = '\f'; break;
+                case 'n': token = '\n'; break;
+                case 'r': token = '\r'; break;
+                case 't': token = '\t'; break;
+                case 'u': token = 'u'; break;
+                default: throw std::runtime_error("ZxJson::JParser::ParseString(): unknown escape character! -> " + token);
                 }
 
                 if (token == 'u')
@@ -329,7 +291,7 @@ namespace ZQF::ZxJson
             }
         }
 
-        rfJValue = std::move(str);
+        rfJValue.Assign(std::move(str));
     }
 
     auto JParser::ParseTrue(JValue& rfJValue) -> void
@@ -337,7 +299,7 @@ namespace ZQF::ZxJson
         assert(this->CurToken() == 't');
         assert(::strncmp(this->CurPtr(), "true", 4) == 0);
         this->AddReadBytes(4);
-        rfJValue = true;
+        rfJValue.Assign(true);
     }
 
     auto JParser::ParseFalse(JValue& rfJValue) -> void
@@ -345,7 +307,7 @@ namespace ZQF::ZxJson
         assert(this->CurToken() == 'f');
         assert(::strncmp(this->CurPtr(), "false", 5) == 0);
         this->AddReadBytes(5);
-        rfJValue = false;
+        rfJValue.Assign(false);
     }
 
     auto JParser::ParseNull(JValue& rfJValue) -> void
@@ -353,46 +315,24 @@ namespace ZQF::ZxJson
         assert(this->CurToken() == 'n');
         assert(::strncmp(this->CurPtr(), "null", 4) == 0);
         this->AddReadBytes(4);
-        rfJValue = JNull_t{};
+        rfJValue.Assign(JNull_t{});
     }
 
     auto JParser::ParseValue(JValue& rfJValue) -> void
     {
-        switch (this->CurToken())
+        const auto cur_token = this->CurToken();
+        switch (cur_token)
         {
-        case '{':
-            ParseObject(rfJValue);
-            break; // object
-        case '[':
-            ParseArray(rfJValue);
-            break; // array
-        case 't':
-            ParseTrue(rfJValue);
-            break; // true
-        case 'f':
-            ParseFalse(rfJValue);
-            break; // false
-        case 'n':
-            ParseNull(rfJValue);
-            break; // null
-        case '"':
-            ParseString(rfJValue);
-            break; // string
-        case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-        case '-':
-            ParseNumber(rfJValue);
-            break; // Number
-        default:
-            throw std::runtime_error("ZxJson::JParser::ParseValue(): value error!");
+        case '{': ParseObject(rfJValue); break; // object
+        case '[': ParseArray(rfJValue); break; // array
+        case 't': ParseTrue(rfJValue); break; // true
+        case 'f': ParseFalse(rfJValue); break; // false
+        case 'n': ParseNull(rfJValue); break; // null
+        case '"': ParseString(rfJValue); break; // string
+        case '0':case '1':case '2':case '3':
+        case '4':case '5':case '6':case '7':
+        case '8':case '9':case '-': ParseNumber(rfJValue); break; // Number
+        default: throw std::runtime_error("ZxJson::JParser::ParseValue(): token error! -> " + cur_token);
         }
     }
 } // namespace ZQF::ZxJson
