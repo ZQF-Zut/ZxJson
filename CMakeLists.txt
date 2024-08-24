@@ -1,5 +1,5 @@
 # Main CMakeLists
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.25)
 
 # Project Name
 project(Zut_ZxJson_Main)
