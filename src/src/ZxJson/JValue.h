@@ -152,11 +152,11 @@ namespace ZQF::ZxJson
     {
         if constexpr (std::is_integral_v<T>)
         {
-            return this->GetArray()[std::forward<T>(rfData)];
+            return this->ToArray()[std::forward<T>(rfData)];
         }
         else
         {
-            return this->GetObject()[std::forward<T>(rfData)];
+            return this->ToObject()[std::forward<T>(rfData)];
         }
     }
 

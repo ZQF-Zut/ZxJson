@@ -462,6 +462,11 @@ namespace ZQF
 
     //[[maybe_unused]] int a = 0;
 
+    {
+        ZQF::ZxJson::JValue jv_null;
+        jv_null["131412"] = 666;
+    }
+
     std::println("all passed!");
 }
 
@@ -524,11 +529,11 @@ auto main(void) -> int
         // TestLoadStoreViaFile();
         // TestJsonParser();
         // TestJsonDumper();
-        // TestJsonValue();
+        TestJsonValue();
         // TestJsonParseRegularEscape();
         // TestJsonParseUnicodeEscape();
         // BenchJsonDumper();
-        BenchJsonParser();
+        // BenchJsonParser();
     }
     catch (const std::exception& err)
     {
