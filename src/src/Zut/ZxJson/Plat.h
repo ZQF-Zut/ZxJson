@@ -5,8 +5,8 @@
 #include <string_view>
 
 
-namespace ZQF::ZxJson::Private
+namespace ZQF::Zut::ZxJson::Plat
 {
     auto ReadAllBytes(const std::string_view msPath) -> std::pair<std::size_t, std::unique_ptr<char[]>>;
     auto WriteAllBytes(const std::string_view msPath, const std::span<const char> spData, const bool isForceCreate) -> void;
-} // namespace ZQF::ZxJsonPrivate
+} // namespace ZQF::Zut::ZxJson::Plat

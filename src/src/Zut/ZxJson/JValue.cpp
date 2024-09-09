@@ -1,7 +1,7 @@
-#include <ZxJson/JValue.h>
+#include "JValue.h"
 
 
-namespace ZQF::ZxJson
+namespace ZQF::Zut::ZxJson
 {
     auto JValue::Dump(const bool isFormat) const -> std::string
     {
@@ -125,4 +125,4 @@ namespace ZQF::ZxJson
             wsText.append(1, '}');
         }
     }
-} // namespace ZQF::ZxJson
+} // namespace ZQF::Zut::ZxJson

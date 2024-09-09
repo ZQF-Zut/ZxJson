@@ -11,11 +11,11 @@ endif()
 
 # Set Source File Path
 list(APPEND "${PROJECT_NAME}_SRC_FILE" 
-    "src/ZxJson/JDoc.cpp" 
-    "src/ZxJson/JIO.cpp"
-    "src/ZxJson/JParser.cpp"
-    "src/ZxJson/JValue.cpp"
-    "src/ZxJson/Platform.cpp")
+    "src/Zut/ZxJson/JDoc.cpp" 
+    "src/Zut/ZxJson/JIO.cpp"
+    "src/Zut/ZxJson/JParser.cpp"
+    "src/Zut/ZxJson/JValue.cpp"
+    "src/Zut/ZxJson/Plat.cpp")
 
 # Set Library
 add_library("${PROJECT_NAME}" "${${PROJECT_NAME}_SRC_FILE}")

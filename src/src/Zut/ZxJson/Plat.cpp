@@ -1,19 +1,15 @@
-#include <ZxJson/Platform.h>
+#include "Plat.h"
 #include <span>
 #include <stdexcept>
+
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-#elif __linux__
-#include <fcntl.h>
-#include <unistd.h>
-#endif
 
 
-namespace ZQF::ZxJson::Private
+namespace ZQF::Zut::ZxJson::Plat
 {
-#ifdef _WIN32
     static auto PathUtf8ToWide(const std::string_view msPath) -> std::unique_ptr<wchar_t[]>
     {
         const std::size_t buffer_max_chars = (msPath.size() * sizeof(char) + 1) * 2;
@@ -45,7 +41,14 @@ namespace ZQF::ZxJson::Private
         (void)::WriteFile(hfile, spData.data(), static_cast<DWORD>(spData.size_bytes()), &write, nullptr);
         (void)::CloseHandle(hfile);
     }
-#else
+}// namespace ZQF::Zut::ZxJson::Plat
+#elif __linux__
+#include <fcntl.h>
+#include <unistd.h>
+
+
+namespace ZQF::Zut::ZxJson::Plat
+{
     auto ReadAllBytes(const std::string_view msPath) -> std::pair<std::size_t, std::unique_ptr<char[]>>
     {
         const auto file_handle = ::open(msPath.data(), O_RDONLY, 0666);
@@ -67,5 +70,8 @@ namespace ZQF::ZxJson::Private
         ::write(file_handle, spData.data(), spData.size_bytes());
         ::close(file_handle);
     }
+} // namespace ZQF::Zut::ZxJson::Plat
 #endif
-} // namespace ZQF::ZxJsonPrivate
+
+
+

@@ -1,9 +1,9 @@
-#include <ZxJson/JIO.h>
-#include <ZxJson/JParser.h>
-#include <ZxJson/Platform.h>
+#include "JIO.h"
+#include "JParser.h"
+#include "Plat.h"
 
 
-namespace ZQF::ZxJson
+namespace ZQF::Zut::ZxJson
 {
     auto LoadViaMemory(const std::span<const char> spData) -> JValue
     {
@@ -14,7 +14,7 @@ namespace ZQF::ZxJson
 
     auto LoadViaFile(const std::string_view msPath) -> JValue
     {
-        auto [file_size, file_data] = Private::ReadAllBytes(msPath);
+        auto [file_size, file_data] = Plat::ReadAllBytes(msPath);
         return ZxJson::LoadViaMemory(std::span{ file_data.get(), file_size });
     }
 
@@ -28,6 +28,6 @@ namespace ZQF::ZxJson
     auto StoreViaFile(const std::string_view msPath, const JValue& rfJValue, const bool isFormat, const bool isForceSave) -> void
     {
         auto dump_str = ZxJson::StoreViaMemory(rfJValue, isFormat);
-        Private::WriteAllBytes(msPath, dump_str, isForceSave);
+        Plat::WriteAllBytes(msPath, dump_str, isForceSave);
     }
-} // namespace ZQF::ZxJson
+} // namespace ZQF::Zut::ZxJson

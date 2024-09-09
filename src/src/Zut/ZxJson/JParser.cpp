@@ -1,11 +1,11 @@
-#include <ZxJson/JParser.h>
+#include "JParser.h"
 #include <cmath>
 #include <cstring>
 
 
-namespace ZQF::ZxJson
+namespace ZQF::Zut::ZxJson
 {
-    JParser::JParser(std::span<const char> spJson) : m_spJson{ spJson }
+    JParser::JParser(const std::span<const char> spJson) : m_spJson{ spJson }
     {
     }
 
@@ -31,17 +31,17 @@ namespace ZQF::ZxJson
         return m_spJson.data() + m_nReadBytes;
     }
 
-    auto JParser::TotalBytes() const -> size_t
+    auto JParser::TotalBytes() const -> std::size_t
     {
         return m_spJson.size();
     }
 
-    auto JParser::GetReadBytes() const -> size_t
+    auto JParser::GetReadBytes() const -> std::size_t
     {
         return m_nReadBytes;
     }
 
-    auto JParser::AddReadBytes(size_t nCount) -> void
+    auto JParser::AddReadBytes(const std::size_t nCount) -> void
     {
         this->m_nReadBytes += nCount;
     }
@@ -335,4 +335,4 @@ namespace ZQF::ZxJson
         default: throw std::runtime_error("ZxJson::JParser::ParseValue(): token error! -> " + cur_token);
         }
     }
-} // namespace ZQF::ZxJson
+} // namespace ZQF::Zut::ZxJson

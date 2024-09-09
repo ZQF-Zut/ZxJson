@@ -1,8 +1,9 @@
-#include <ZxJson/JDoc.h>
-#include <ZxJson/Platform.h>
+#include "JDoc.h"
+#include "JParser.h"
+#include "Plat.h"
 
 
-namespace ZQF::ZxJson
+namespace ZQF::Zut::ZxJson
 {
     JDoc::JDoc()
     {
@@ -32,14 +33,14 @@ namespace ZQF::ZxJson
         return m_JValue.ToObject();
     }
 
-    auto JDoc::LoadViaMemory(std::span<char> spData) -> bool
+    auto JDoc::LoadViaMemory(const std::span<const char> spData) -> bool
     {
         return JParser{ spData }.Parse(m_JValue);
     }
 
     auto JDoc::LoadViaFile(const std::string_view msPath) -> bool
     {
-        auto [file_size, file_data] = Private::ReadAllBytes(msPath);
+        const auto [file_size, file_data] = Plat::ReadAllBytes(msPath);
         return this->LoadViaMemory(std::span{ file_data.get(), file_size });
     }
 
@@ -50,7 +51,7 @@ namespace ZQF::ZxJson
 
     auto JDoc::StoreViaFile(const std::string_view msPath, const bool isFormat, const bool isForceSave) const -> void
     {
-        auto json_str = this->StoreViaMemory(isFormat);
-        Private::WriteAllBytes(msPath, std::span{ json_str }, isForceSave);
+        const auto json_str = this->StoreViaMemory(isFormat);
+        Plat::WriteAllBytes(msPath, std::span{ json_str }, isForceSave);
     }
-} // namespace ZQF::ZxJson
+} // namespace ZQF::Zut::ZxJson

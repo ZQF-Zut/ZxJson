@@ -1,8 +1,11 @@
 #pragma once
-#include <ZxJson/JParser.h>
+#include <span>
+#include <string>
+#include <string_view>
+#include <Zut/ZxJson/JValue.h>
 
 
-namespace ZQF::ZxJson
+namespace ZQF::Zut::ZxJson
 {
     class JDoc
     {
@@ -22,9 +25,9 @@ namespace ZQF::ZxJson
         auto GetJValue() -> JValue&;
         auto GetJArray() -> JArray_t&;
         auto GetJObject() -> JObject_t&;
-        auto LoadViaMemory(std::span<char> spData) -> bool;
+        auto LoadViaMemory(const std::span<const char> spData) -> bool;
         auto LoadViaFile(const std::string_view msPath) -> bool;
-        auto StoreViaMemory(bool isFormat) const->std::string;
+        auto StoreViaMemory(bool isFormat) const -> std::string;
         auto StoreViaFile(const std::string_view msPath, const bool isFormat, const bool isForceSave) const -> void;
     };
-} // namespace ZQF::ZxJson
+} // namespace ZQF::Zut::ZxJson

@@ -1,31 +1,34 @@
 #pragma once
 #include <span>
-#include <ZxJson/JValue.h>
+#include <Zut/ZxJson/JValue.h>
 
 
-namespace ZQF::ZxJson
+namespace ZQF::Zut::ZxJson
 {
     class JParser
     {
     private:
-        size_t m_nReadBytes{};
+        std::size_t m_nReadBytes{};
         std::span<const char> m_spJson;
 
     public:
-        JParser(std::span<const char> spJson);
+        JParser(const std::span<const char> spJson);
         ~JParser();
         JParser(const JParser&) = delete;
         JParser(JParser&&) noexcept = delete;
+
+    public:
         auto operator=(const JParser&)->JParser & = delete;
         auto operator=(JParser&&) noexcept -> JParser & = delete;
 
+    public:
         auto Parse(JValue& rfJValue) -> bool;
 
     private:
         auto CurPtr() -> const char*;
-        auto GetReadBytes() const->size_t;
-        auto AddReadBytes(size_t nCount = 1) -> void;
-        auto TotalBytes() const->size_t;
+        auto GetReadBytes() const -> std::size_t;
+        auto AddReadBytes(const std::size_t nCount = 1) -> void;
+        auto TotalBytes() const -> std::size_t;
 
         auto SkipWhite() -> char;
         auto NextToken() -> char;
@@ -40,4 +43,4 @@ namespace ZQF::ZxJson
         auto ParseNull(JValue& rfJValue) -> void;
         auto ParseValue(JValue& rfJValue) -> void;
     };
-} // namespace ZQF::ZxJson
+} // namespace ZQF::Zut::ZxJson
