@@ -182,23 +182,27 @@ namespace ZQF::Zut::ZxJson
 
     inline auto JValue::Copy(const JValue& rfJValue) -> JValue&
     {
-        std::visit(
-            [this](auto&& data) {
+        std::visit
+        (
+            [this](auto&& data)
+            {
                 using T_data = std::decay_t<decltype(data)>;
+
                 if constexpr (std::is_same_v<T_data, std::unique_ptr<JString_t>> || std::is_same_v<T_data, std::unique_ptr<JArray_t>> || std::is_same_v<T_data, std::unique_ptr<JObject_t>>)
                 {
-                    (*this) = *data;
+                    this->Assign(*data);
                 }
                 else if constexpr (std::is_same_v<T_data, JNull_t> || std::is_same_v<T_data, JBool_t> || std::is_same_v<T_data, JInt_t> || std::is_same_v<T_data, JDouble_t>)
                 {
-                    (*this) = data;
+                    this->Assign(data);
                 }
                 else
                 {
                     static_assert(false, "ZxJson::JValue::operator=<>(): error type!");
                 }
             },
-            rfJValue.m_Data);
+            rfJValue.m_Data
+        );
 
         return *this;
     }
