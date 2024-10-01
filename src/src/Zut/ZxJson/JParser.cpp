@@ -7,10 +7,13 @@ namespace ZQF::Zut::ZxJson
 {
     JParser::JParser(const std::span<const char> spJson) : m_spJson{ spJson }
     {
+        // skip utf-8 bom
+        if (spJson[0] == '\xEF' && spJson[1] == '\xBB' && spJson[2] == '\xBF') { this->AddReadBytes(3); }
     }
 
     JParser::~JParser()
     {
+
     }
 
     auto JParser::Parse(JValue& rfJValue) -> bool
