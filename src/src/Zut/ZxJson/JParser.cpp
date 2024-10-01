@@ -76,7 +76,7 @@ namespace ZQF::Zut::ZxJson
         case ',':
             this->AddReadBytes();
             return this->NextToken();
-        default: throw std::runtime_error("ZxJson::JParser::NextToken(): not find token -> " + tmp_char);
+        default: throw std::runtime_error(std::string{ "ZxJson::JParser::NextToken(): not find token -> " }.append(1, tmp_char));
         }
     }
 
@@ -215,7 +215,7 @@ namespace ZQF::Zut::ZxJson
                 }
                 else
                 {
-                    throw std::runtime_error("ZxJson::JParser::ParseString(): surrogate pair trailing range error! -> " + std::to_string(code_point_trailing));
+                    throw std::runtime_error(std::string{ "ZxJson::JParser::ParseString(): surrogate pair trailing range error! -> " }.append(std::to_string(code_point_trailing)));
                 }
             }
 
@@ -244,7 +244,7 @@ namespace ZQF::Zut::ZxJson
             }
             else
             {
-                throw std::runtime_error("ZxJson::JParser::ParseString(): encode utf8 error! -> " + std::to_string(code_point));
+                throw std::runtime_error(std::string{ "ZxJson::JParser::ParseString(): encode utf8 error! -> " }.append(std::to_string(code_point)));
             }
             };
 
@@ -268,7 +268,7 @@ namespace ZQF::Zut::ZxJson
                 case 'r': token = '\r'; break;
                 case 't': token = '\t'; break;
                 case 'u': token = 'u'; break;
-                default: throw std::runtime_error("ZxJson::JParser::ParseString(): unknown escape character! -> " + token);
+                default: throw std::runtime_error(std::string{ "ZxJson::JParser::ParseString(): unknown escape character! -> " }.append(1, token));
                 }
 
                 if (token == 'u')
@@ -332,7 +332,7 @@ namespace ZQF::Zut::ZxJson
         case '0':case '1':case '2':case '3':
         case '4':case '5':case '6':case '7':
         case '8':case '9':case '-': ParseNumber(rfJValue); break; // Number
-        default: throw std::runtime_error("ZxJson::JParser::ParseValue(): token error! -> " + cur_token);
+        default: throw std::runtime_error(std::string{ "ZxJson::JParser::ParseValue(): token error! -> " }.append(1, cur_token));
         }
     }
 } // namespace ZQF::Zut::ZxJson
