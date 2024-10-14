@@ -3,6 +3,7 @@
 #include <Zut/ZxJson/JParser.h>
 #include <Zut/ZxJson/JDoc.h>
 #include <Zut/ZxJson/JIO.h>
+#include <Zut/ZxJson/JReflex.h>
 
 
 namespace ZxJson
