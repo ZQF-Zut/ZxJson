@@ -12,8 +12,8 @@ namespace ZQF::Zut::ZxJson::Reflex
         template<typename Field_Type, typename IO_Type>
         static auto WriteBase(Field_Type&& Field, IO_Type&& Writer) -> void
         {
-            using io_type_t = std::decay_t<IO_Type>;
-            using field_type_t = std::decay_t<Field_Type>;
+            using io_type_t [[maybe_unused]] = std::decay_t<IO_Type>;
+            using field_type_t [[maybe_unused]] = std::decay_t<Field_Type>;
 
             if constexpr (std::is_same_v<ZxJson::JValue, io_type_t>)
             {
@@ -78,11 +78,11 @@ namespace ZQF::Zut::ZxJson::Reflex
             {
                 if constexpr (std::is_integral_v<field_type_t>)
                 {
-                    Field = Reader.GetNum<field_type_t>();
+                    Field = Reader.template GetNum<field_type_t>();
                 }
                 else if constexpr (std::is_floating_point_v<field_type_t>)
                 {
-                    Field = Reader.GetFloat<field_type_t>();
+                    Field = Reader.template GetFloat<field_type_t>();
                 }
                 else if constexpr (std::is_same_v<bool, field_type_t>)
                 {

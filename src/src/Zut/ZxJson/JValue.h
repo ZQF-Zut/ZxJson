@@ -99,9 +99,9 @@ namespace ZQF::Zut::ZxJson
     };
 
 
-    inline JValue::JValue()
+    inline JValue::JValue() : m_Data{ JNull_t{} }
     {
-        m_Data = JNull_t{};
+
     }
 
     template <class T>

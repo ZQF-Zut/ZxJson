@@ -12,7 +12,7 @@ struct MyStruct
     std::vector<int> vec_x{ 1,2,3 };
     std::vector<std::string> vec_xx{ "10086","666","2233" };
     std::list<std::string> list_xx{ "sgs","sdoigs","soihgew" };
-    std::map<std::string, size_t> map_xx{ {"131212",666},{"349y83", 5474} };
+    std::map<std::string, std::size_t> map_xx{ {"131212",666},{"349y83", 5474} };
 
 };
 
@@ -25,7 +25,7 @@ struct MyStruct2
     std::vector<int> vec_x;
     std::vector<std::string> vec_xx;
     std::list<std::string> list_xx;
-    std::map<std::string, size_t> map_xx;
+    std::map<std::string, std::size_t> map_xx;
 };
 
 
