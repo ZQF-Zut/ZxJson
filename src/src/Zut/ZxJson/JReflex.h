@@ -15,7 +15,7 @@ namespace ZQF::Zut::ZxJson
             std::forward<Object_Type>(Object),
             [&json_value](auto&& name, auto& value)
             {
-                Reflex::Write(value, std::forward<decltype(name)>(name), json_value);
+                Reflex::Field::Write(std::forward<decltype(value)>(value), std::forward<decltype(name)>(name), json_value);
             }
         );
 
@@ -30,7 +30,7 @@ namespace ZQF::Zut::ZxJson
             Object,
             [&JsonValue](auto&& name, auto& value)
             {
-                Reflex::Read(value, std::forward<decltype(name)>(name), JsonValue);
+                Reflex::Field::Read(std::forward<decltype(value)>(value), std::forward<decltype(name)>(name), JsonValue);
             }
         );
     }
