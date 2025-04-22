@@ -76,8 +76,10 @@ auto main() -> int
 ```
 
 ## Install
-- CMake
+- CMake >= 3.11
 ```cmake
+include(FetchContent)
+
 FetchContent_Declare(
   ZxJson
   GIT_REPOSITORY https://github.com/ZQF-Zut/ZxJson.git
