@@ -150,13 +150,22 @@ namespace ZQF::Zut::ZxJson
     template <class T>
     inline auto JValue::operator[](T&& rfData) -> JValue&
     {
+        using T_decay = std::decay_t<decltype(rfData)>;
+
         if constexpr (std::is_integral_v<T>)
         {
             return this->ToArray()[std::forward<T>(rfData)];
         }
         else
         {
-            return this->ToObject()[std::forward<T>(rfData)];
+            if constexpr (std::is_same_v<T, std::decay_t<JObject_t::key_type>> || std::is_bounded_array_v<std::remove_cvref_t<T>> || std::is_same_v<T_decay, char*> || std::is_same_v<T_decay, const char*>)
+            {
+                return this->ToObject()[std::forward<T>(rfData)];
+            }
+            else
+            {
+                return this->ToObject()[JObject_t::key_type{ rfData }];
+            }
         }
     }
 
