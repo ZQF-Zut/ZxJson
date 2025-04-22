@@ -74,3 +74,13 @@ auto main() -> int
 
 }
 ```
+
+## Install
+- CMake
+```cmake
+FetchContent_Declare(
+  ZxJson
+  GIT_REPOSITORY https://github.com/ZQF-Zut/ZxJson.git
+  GIT_TAG main)
+FetchContent_MakeAvailable(ZxJson)
+```
