@@ -13,3 +13,4 @@ build/
 /vsxmake2022
 /.vs
 /.build
+/.install
