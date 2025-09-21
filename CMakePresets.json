@@ -6,15 +6,26 @@
     },
     "configurePresets": [
         {
-            "name": "windows-msvc-base",
+            "name": "config-base",
             "hidden": true,
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/.build/${presetName}",
             "installDir": "${sourceDir}/.install/${presetName}",
             "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+                "ZQF_DEVMODE": true,
+                "ZQF_TESTING": true,
+                "ZQF_DOXYGEN": true,
+                "ZQF_VCPKG":true
+            }
+        },
+        {
+            "name": "windows-msvc-base",
+            "inherits": "config-base",
+            "hidden": true,
+            "cacheVariables": {
                 "CMAKE_C_COMPILER": "cl.exe",
-                "CMAKE_CXX_COMPILER": "cl.exe",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": true
+                "CMAKE_CXX_COMPILER": "cl.exe"
             },
             "condition": {
                 "type": "equals",
@@ -24,14 +35,11 @@
         },
         {
             "name": "linux-gcc-base",
+            "inherits": "config-base",
             "hidden": true,
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/.build/${presetName}",
-            "installDir": "${sourceDir}/.install/${presetName}",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "gcc",
-                "CMAKE_CXX_COMPILER": "g++",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": true
+                "CMAKE_CXX_COMPILER": "g++"
             },
             "condition": {
                 "type": "equals",
@@ -41,14 +49,11 @@
         },
         {
             "name": "macos-clang-base",
+            "inherits": "config-base",
             "hidden": true,
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/.build/${presetName}",
-            "installDir": "${sourceDir}/.install/${presetName}",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": true
+                "CMAKE_CXX_COMPILER": "clang++"
             },
             "condition": {
                 "type": "equals",
@@ -58,14 +63,11 @@
         },
         {
             "name": "mingw-gcc-base",
+            "inherits": "config-base",
             "hidden": true,
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/.build/${presetName}",
-            "installDir": "${sourceDir}/.install/${presetName}",
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "gcc",
-                "CMAKE_CXX_COMPILER": "g++",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": true
+                "CMAKE_CXX_COMPILER": "g++"
             },
             "condition": {
                 "type": "anyOf",

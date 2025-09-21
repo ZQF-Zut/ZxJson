@@ -1,0 +1,24 @@
+{
+  "name": "zqf-zxjson",
+  "version": "1.0",
+  "dependencies": [
+    "zqf-cmake-modules"
+  ],
+  "vcpkg-configuration": {
+    "default-registry": {
+      "kind": "git",
+      "repository": "https://github.com/Microsoft/vcpkg",
+      "baseline": "29ff5b8131d0c6c8fcb8fbaef35992f0d507cd7c"
+    },
+    "registries": [
+      {
+        "kind": "git",
+        "repository": "https://github.com/ZQF-Zut/ZxPKG.git",
+        "baseline": "ac43de31813d5102d0993afb5e29057955a54903",
+        "packages": [
+          "zqf-*"
+        ]
+      }
+    ]
+  }
+}
