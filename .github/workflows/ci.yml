@@ -1,0 +1,32 @@
+name: zqf-zut-zxjson-ci
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build_and_test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2022]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: check code
+      uses: actions/checkout@v4
+
+    - name: setup env
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x64
+
+    - name: config cmake
+      run: cmake --preset=windows-msvc-x86-64-debug
+
+    - name: build
+      run: cmake --build .build/windows-msvc-x86-64-debug
+
+    - name: testing
+      run: ctest --test-dir .build/windows-msvc-x86-64-debug
