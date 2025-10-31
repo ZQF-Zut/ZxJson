@@ -22,7 +22,11 @@ add_subdirectory("src")
 
 # Dev
 if(ZQF_DEVMODE)
+  add_subdirectory("tryout")
+endif()
+
+# Testing
+if(ZQF_TESTING)
   enable_testing()
   add_subdirectory("test")
-  add_subdirectory("tryout")
 endif()

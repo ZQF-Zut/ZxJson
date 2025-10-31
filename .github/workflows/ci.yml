@@ -22,7 +22,7 @@ jobs:
         arch: x64
 
     - name: config
-      run: cmake --preset=windows-msvc-x86-64-${{ matrix.config }} -DZQF_DOXYGEN=OFF
+      run: cmake --preset=windows-msvc-x86-64-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVMODE=OFF
 
     - name: build
       run: cmake --build .build/windows-msvc-x86-64-${{ matrix.config }}
@@ -45,7 +45,7 @@ jobs:
       run: sudo apt update && sudo apt install -y clang cmake ninja-build pkg-config curl git
 
     - name: config
-      run: cmake --preset=linux-${{ matrix.config }} -DZQF_DOXYGEN=OFF
+      run: cmake --preset=linux-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVMODE=OFF
 
     - name: build
       run: cmake --build .build/linux-${{ matrix.config }}

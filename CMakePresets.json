@@ -15,6 +15,7 @@
         "CMAKE_EXPORT_COMPILE_COMMANDS": true,
         "VCPKG_INSTALL_OPTIONS": "--no-print-usage",
         "ZQF_DEVMODE": true,
+        "ZQF_TESTING": true,
         "ZQF_DOXYGEN": true,
         "ZQF_VCPKG": true
       }
