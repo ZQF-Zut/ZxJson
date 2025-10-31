@@ -14,16 +14,16 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - name: check code
+    - name: check
       uses: actions/checkout@v4
 
-    - name: setup env
+    - name: setup
       uses: ilammy/msvc-dev-cmd@v1
       with:
         arch: x64
 
-    - name: config cmake
-      run: cmake --preset=windows-msvc-x86-64-debug
+    - name: config
+      run: cmake --preset=windows-msvc-x86-64-debug -DZQF_DOXYGEN=OFF
 
     - name: build
       run: cmake --build .build/windows-msvc-x86-64-debug
