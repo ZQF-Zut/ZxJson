@@ -405,6 +405,8 @@ TEST_CASE("utf8_file_name_save_load")
 
   const auto jval = ZxJson::LoadViaFile(reinterpret_cast<const char*>(u8_file_name));
   REQUIRE(jval.At("dsgsdgs").GetNum() == 2141241);
+
+  REQUIRE(std::filesystem::remove(u8_file_name));
 }
 
 TEST_CASE("reflex")
@@ -462,4 +464,6 @@ TEST_CASE("reflex")
   REQUIRE(reflex_obj2.vec_xx == org_obj.vec_xx);
   REQUIRE(reflex_obj2.list_xx == org_obj.list_xx);
   REQUIRE(reflex_obj2.map_xx == org_obj.map_xx);
+
+  REQUIRE(std::filesystem::remove("test_reflex.json"));
 }
