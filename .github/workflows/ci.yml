@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build_and_test_on_windows:
+  windows_x64:
     strategy:
       fail-fast: false
       matrix:

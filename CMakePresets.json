@@ -102,7 +102,8 @@
       "displayName": "Windows MSVC x86-64 Debug MT",
       "inherits": "windows-msvc-x86-64-debug",
       "cacheVariables": {
-        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDebug"
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDebug",
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static"
       }
     },
     {
@@ -122,7 +123,8 @@
       "displayName": "Windows MSVC x86-64 Release MT",
       "inherits": "windows-msvc-x86-64-release",
       "cacheVariables": {
-        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded"
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded",
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static"
       }
     },
     {
@@ -186,7 +188,8 @@
       "displayName": "Windows MSVC x86 Release MT",
       "inherits": "windows-msvc-x86-release",
       "cacheVariables": {
-        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded"
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded",
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static"
       }
     },
     {
