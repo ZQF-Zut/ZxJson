@@ -5,14 +5,13 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build_and_test:
+  build_and_test_on_windows:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2022]
+        config: [debug, debug-mt, release, release-mt]
 
-    runs-on: ${{ matrix.os }}
-
+    runs-on: windows-2022
     steps:
     - name: check
       uses: actions/checkout@v4
@@ -23,10 +22,33 @@ jobs:
         arch: x64
 
     - name: config
-      run: cmake --preset=windows-msvc-x86-64-debug -DZQF_DOXYGEN=OFF
+      run: cmake --preset=windows-msvc-x86-64-${{ matrix.config }} -DZQF_DOXYGEN=OFF
 
     - name: build
-      run: cmake --build .build/windows-msvc-x86-64-debug
+      run: cmake --build .build/windows-msvc-x86-64-${{ matrix.config }}
 
     - name: testing
-      run: ctest --test-dir .build/windows-msvc-x86-64-debug
+      run: ctest --test-dir .build/windows-msvc-x86-64-${{ matrix.config }}
+
+  # build_and_test_ubuntu:
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       config: [debug, release]
+
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: check
+  #     uses: actions/checkout@v4
+
+  #   - name: setup
+  #     run: sudo apt update && sudo apt install -y build-essential
+
+  #   - name: config
+  #     run: cmake --preset=linux-gcc-x86-64-debug -DZQF_DOXYGEN=OFF
+
+  #   - name: build
+  #     run: cmake --build .build/linux-gcc-x86-64-debug
+
+  #   - name: testing
+  #     run: ctest --test-dir .build/linux-gcc-x86-64-debug

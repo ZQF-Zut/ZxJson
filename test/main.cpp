@@ -10,7 +10,7 @@ TEST_CASE("value")
   // integral &&
   {
     json_value = 1;
-    REQUIRE(json_value.GetNum() == 2);
+    REQUIRE(json_value.GetNum() == 1);
     ZxJson::JValue jv_integral_rr{ 1 };
     REQUIRE(json_value.GetNum() == 1);
     REQUIRE(jv_integral_rr.GetNum() == 1);
