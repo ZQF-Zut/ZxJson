@@ -1,0 +1,53 @@
+CompileFlags:
+  Add: ['/clang:-std=c++23', '/EHsc']
+
+Diagnostics:
+    ClangTidy:
+        Add: [clang-analyzer-*, clang-diagnostic-*, llvm-*, misc-*, cppcoreguidelines-*, performance-*, portability-*, modernize-*, readability-*]
+
+        Remove:
+          - cppcoreguidelines-avoid-do-while
+          - cppcoreguidelines-pro-bounds-constant-array-index
+          - cppcoreguidelines-pro-type-member-init
+          - modernize-avoid-c-arrays
+          - modernize-use-trailing-return-type
+          - modernize-use-std-print
+          - misc-misplaced-const
+          - readability-magic-numbers
+          - readability-avoid-const-params-in-decls
+          - readability-qualified-auto
+          - readability-redundant-access-specifiers
+          - readability-named-parameter
+          - misc-use-anonymous-namespace
+          - llvm-qualified-auto
+          - llvm-include-order
+          - cppcoreguidelines-pro-bounds-pointer-arithmetic
+          - cppcoreguidelines-avoid-magic-numbers
+          - cppcoreguidelines-pro-type-reinterpret-cast
+          - cppcoreguidelines-owning-memory
+
+        CheckOptions:
+            readability-identifier-naming.ClassCase: CamelCase
+            readability-identifier-naming.EnumCase: CamelCase
+            readability-identifier-naming.FunctionCase: CamelCase
+            readability-identifier-naming.ClassMemberCase: camelBack
+            readability-identifier-naming.ClassMemberPrefix: 'm_'
+            readability-identifier-naming.UnionCase: CamelCase
+            readability-identifier-naming.VariableCase: lower_case
+            readability-identifier-naming.GlobalVariableCase: 'camelBack'
+            readability-identifier-naming.GlobalVariablePrefix: 'g_'
+            readability-identifier-naming.GlobalVariableIgnoredRegexp: '^sg_.*'
+            readability-identifier-naming.IgnoreMainLikeFunctions: 1
+            readability-redundant-member-init.IgnoreBaseInCopyConstructors: 1
+            readability-implicit-bool-conversion.AllowIntegerConditions: 1
+            readability-implicit-bool-conversion.AllowPointerConditions: 1
+            readability-simplify-boolean-expr.IgnoreMacros: 1
+            misc-unused-parameters.IgnoreVirtual: 1
+            readability-identifier-length.IgnoredParameterNames: 'i|j|k|h|w|z|v|t'
+            readability-identifier-length.IgnoredVariableNames: 'i|j|k|h|w|z|v|t'
+            misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic: 1
+
+Index:
+  Background: Skip
+
+

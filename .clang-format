@@ -1,0 +1,47 @@
+BasedOnStyle: Microsoft
+IndentWidth: 2
+ColumnLimit: 256
+SortIncludes: false
+
+# BraceWrapping
+BraceWrapping:
+  AfterEnum: true
+  AfterStruct: true
+  AfterClass: true
+  AfterFunction: true
+  AfterNamespace: true
+  BeforeLambdaBody: true
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: true
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 2
+AlignAfterOpenBracket: AlwaysBreak
+AllowShortLoopsOnASingleLine: true
+AllowShortBlocksOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: true
+
+# Pointer
+DerivePointerAlignment: false
+PointerAlignment: Left
+ReferenceAlignment: Left
+
+# Attributes
+BreakAfterAttributes: Never
+
+# CXX
+Language: Cpp
+Cpp11BracedListStyle: false
+# ConstructorInitializers
+BreakConstructorInitializers: BeforeColon
+PackConstructorInitializers: NextLineOnly
+# namespace
+NamespaceIndentation: All
+FixNamespaceComments: true
+
+# Template
+BreakTemplateDeclarations: Leave

@@ -3,435 +3,421 @@
 #include <vector>
 #include <memory>
 #include <variant>
-#include <optional>
 #include <stdexcept>
 #include <unordered_map>
 #include <cmath>
 #include <cassert>
 
-
 namespace ZQF::Zut::ZxJson
 {
-    // https://www.cppstories.com/2021/heterogeneous-access-cpp20/
-    struct string_hash
+  // https://www.cppstories.com/2021/heterogeneous-access-cpp20/
+  struct string_hash // NOLINT
+  {
+    using is_transparent = void;
+    [[nodiscard]] size_t operator()(const char* cpKey) const { return std::hash<std::string_view>{}(cpKey); }
+
+    [[nodiscard]] size_t operator()(const std::string_view msKey) const { return std::hash<std::string_view>{}(msKey); }
+
+    [[nodiscard]] size_t operator()(const std::string& msKey) const { return std::hash<std::string>{}(msKey); }
+  };
+
+  class JValue;
+  using JNull_t = std::monostate;
+  using JBool_t = bool;
+  using JInt_t = uint64_t;
+  using JFloat_t = float;
+  using JDouble_t = double;
+  using JString_t = std::string;
+  using JStringView_t = std::string_view;
+  using JArray_t = std::vector<JValue>;
+  using JObject_t = std::unordered_map<std::string, JValue, string_hash, std::equal_to<>>;
+  using JDataType = std::variant<JNull_t, JBool_t, JInt_t, JDouble_t, std::unique_ptr<JString_t>, std::unique_ptr<JArray_t>, std::unique_ptr<JObject_t>>;
+
+  class JValue // NOLINT
+  {
+  private:
+    JDataType m_Data;
+
+  public:
+    JValue();
+    JValue(const JValue& rfJValue);
+    template <class T> JValue(T&& rfData);
+    JValue(JValue& rfJValue);
+    JValue(JValue&& rfJValue) noexcept;
+
+    auto operator=(const JValue& rfJValue) -> JValue&;
+    template <class T> auto operator=(T&& rfData) -> JValue&;
+    auto operator=(JValue& rfJValue) -> JValue&; // NOLINT
+    auto operator=(JValue&& rfJValue) noexcept -> JValue&;
+
+    template <class T> auto operator[](T&& rfData) -> JValue&;
+    template <class T> auto operator[](T&& rfData) const -> const JValue&;
+
+  public:
+    auto Move(JValue&& rfJValue) -> JValue&;
+    auto Copy(const JValue& rfJValue) -> JValue&;
+
+  public:
+    template <class T> [[nodiscard]] auto Check() const -> bool;
+    template <class T> auto Assign(T&& rfData) -> JValue&;
+
+  public:
+    template <class T = std::size_t> [[nodiscard]] auto GetNum() const -> T;
+    template <class T = std::double_t> [[nodiscard]] auto GetFloat() const -> T;
+    [[nodiscard]] auto GetBool() const -> bool;
+    [[nodiscard]] auto GetStrView() const -> std::string_view;
+    [[nodiscard]] auto GetStr() -> std::string&;
+    [[nodiscard]] auto GetStr() const -> const std::string&;
+    [[nodiscard]] auto GetArray() -> JArray_t&;
+    [[nodiscard]] auto GetArray() const -> const JArray_t&;
+    [[nodiscard]] auto GetObject() -> JObject_t&;
+    [[nodiscard]] auto GetObject() const -> const JObject_t&;
+
+  public:
+    template <class T> auto At(T&& rfKeyorIndex) -> JValue&;
+    template <class T> auto At(T&& rfKeyorIndex) const -> const JValue&;
+
+  public:
+    auto Clear() -> void;
+    auto ToArray() -> JArray_t&;
+    auto ToObject() -> JObject_t&;
+
+  public:
+    [[nodiscard]] auto Dump(const bool isFormat) const -> std::string;
+    auto Dump(std::string& wsText, const bool isFormat, std::size_t nIndent = 0) const -> void;
+  };
+
+  inline JValue::JValue()
+      : m_Data{ JNull_t{} }
+  {
+  }
+
+  template <class T> inline JValue::JValue(T&& rfData)
+  {
+    this->Assign<T>(std::forward<T>(rfData));
+  }
+
+  inline JValue::JValue(JValue& rfJValue)
+  {
+    this->Copy(rfJValue);
+  }
+
+  inline JValue::JValue(const JValue& rfJValue)
+  {
+    this->Copy(rfJValue);
+  }
+
+  inline JValue::JValue(JValue&& rfJValue) noexcept
+  {
+    this->Move(std::move(rfJValue));
+  }
+
+  template <class T> inline auto JValue::operator=(T&& rfData) -> JValue&
+  {
+    return this->Assign<T>(std::forward<T>(rfData));         // NOLINT
+  }
+
+  inline auto JValue::operator=(JValue& rfJValue) -> JValue& // NOLINT
+  {
+    return this->Copy(rfJValue);                             // NOLINT
+  }
+
+  auto inline JValue::operator=(const JValue& rfJValue) -> JValue&
+  {
+    return this->Copy(rfJValue); // NOLINT
+  }
+
+  inline auto JValue::operator=(JValue&& rfJValue) noexcept -> JValue&
+  {
+    return this->Move(std::move(rfJValue)); // NOLINT
+  }
+
+  template <class T> inline auto JValue::operator[](T&& rfData) -> JValue&
+  {
+    using T_decay = std::decay_t<decltype(rfData)>;
+
+    if constexpr (std::is_integral_v<T>)
     {
-        using is_transparent = void;
-        [[nodiscard]] size_t operator()(const char* cpKey) const
-        {
-            return std::hash<std::string_view>{}(cpKey);
-        }
-
-        [[nodiscard]] size_t operator()(const std::string_view msKey) const
-        {
-            return std::hash<std::string_view>{}(msKey);
-        }
-
-        [[nodiscard]] size_t operator()(const std::string& msKey) const
-        {
-            return std::hash<std::string>{}(msKey);
-        }
-    };
-
-    class JValue;
-    using JNull_t = std::monostate;
-    using JBool_t = bool;
-    using JInt_t = uint64_t;
-    using JFloat_t = float;
-    using JDouble_t = double;
-    using JString_t = std::string;
-    using JStringView_t = std::string_view;
-    using JArray_t = std::vector<JValue>;
-    using JObject_t = std::unordered_map<std::string, JValue, string_hash, std::equal_to<>>;
-    using JDataType = std::variant<JNull_t, JBool_t, JInt_t, JDouble_t, std::unique_ptr<JString_t>, std::unique_ptr<JArray_t>, std::unique_ptr<JObject_t>>;
-
-    class JValue
-    {
-    private:
-        JDataType m_Data;
-
-    public:
-        JValue();
-        JValue(const JValue& rfJValue);
-        template <class T> JValue(T&& rfData);
-        JValue(JValue& rfJValue);
-        JValue(JValue&& rfJValue) noexcept;
-
-        auto operator=(const JValue& rfJValue) -> JValue&;
-        template <class T> auto operator=(T&& rfData) -> JValue&;
-        auto operator=(JValue& rfJValue) -> JValue&;
-        auto operator=(JValue&& rfJValue) noexcept -> JValue&;
-
-        template <class T> auto operator[](T&& rfData) -> JValue&;
-        template <class T> auto operator[](T&& rfData) const -> const JValue&;
-
-    public:
-        auto Move(JValue&& rfJValue) -> JValue&;
-        auto Copy(const JValue& rfJValue) -> JValue&;
-
-    public:
-        template <class T> auto Check() const -> bool;
-        template <class T> auto Assign(T&& rfData) -> JValue&;
-
-    public:
-        template<class T = std::size_t> auto GetNum() const->T;
-        template<class T = std::double_t> auto GetFloat() const->T;
-        auto GetBool() const -> bool;
-        auto GetStrView() const-> std::string_view;
-        auto GetStr() -> std::string&;
-        auto GetStr() const -> const std::string&;
-        auto GetArray() -> JArray_t&;
-        auto GetArray() const -> const JArray_t&;
-        auto GetObject() -> JObject_t&;
-        auto GetObject() const -> const JObject_t&;
-
-    public:
-        template <class T> auto At(T&& rfKeyorIndex) -> JValue&;
-        template <class T> auto At(T&& rfKeyorIndex) const -> const JValue&;
-        
-    public:
-        auto Clear() -> void;
-        auto ToArray() -> JArray_t&;
-        auto ToObject() -> JObject_t&;
-
-    public:
-        auto Dump(const bool isFormat) const -> std::string;
-        auto Dump(std::string& wsText, const bool isFormat, std::size_t nIndent = 0) const -> void;
-    };
-
-
-    inline JValue::JValue() : m_Data{ JNull_t{} }
-    {
-
+      return this->ToArray()[std::forward<T>(rfData)];
     }
-
-    template <class T>
-    inline JValue::JValue(T&& rfData)
+    else
     {
-        this->Assign<T>(std::forward<T>(rfData));
+      if constexpr (std::is_same_v<T, std::decay_t<JObject_t::key_type>> || std::is_bounded_array_v<std::remove_cvref_t<T>> || std::is_same_v<T_decay, char*> || std::is_same_v<T_decay, const char*>)
+      {
+        return this->ToObject()[std::forward<T>(rfData)];
+      }
+      else
+      {
+        return this->ToObject()[JObject_t::key_type{ rfData }];
+      }
     }
+  }
 
-    inline JValue::JValue(JValue& rfJValue)
+  template <class T> inline auto JValue::operator[](T&& rfData) const -> const JValue&
+  {
+    if constexpr (std::is_integral_v<T>)
     {
-        this->Copy(rfJValue);
+      return this->GetArray()[std::forward<T>(rfData)];
     }
-
-    inline JValue::JValue(const JValue& rfJValue)
+    else
     {
-        this->Copy(rfJValue);
+      static_assert(false, "ZxJson::JValue::operator[]() const: error type.");
     }
+  }
 
-    inline JValue::JValue(JValue&& rfJValue) noexcept
-    {
-        this->Move(std::move(rfJValue));
-    }
+  inline auto JValue::Move(JValue&& rfJValue) -> JValue& // NOLINT
+  {
+    this->m_Data = std::move(rfJValue.m_Data);
+    rfJValue.m_Data = JNull_t{};
+    return *this;
+  }
 
-    template <class T>
-    inline auto JValue::operator=(T&& rfData) -> JValue&
-    {
-        return this->Assign<T>(std::forward<T>(rfData));
-    }
-
-    inline auto JValue::operator=(JValue& rfJValue) -> JValue&
-    {
-        return this->Copy(rfJValue);
-    }
-
-    auto inline JValue::operator=(const JValue& rfJValue) -> JValue&
-    {
-        return this->Copy(rfJValue);
-    }
-
-    inline auto JValue::operator=(JValue&& rfJValue) noexcept -> JValue&
-    {
-        return this->Move(std::move(rfJValue));
-    }
-
-
-    template <class T>
-    inline auto JValue::operator[](T&& rfData) -> JValue&
-    {
-        using T_decay = std::decay_t<decltype(rfData)>;
-
-        if constexpr (std::is_integral_v<T>)
+  inline auto JValue::Copy(const JValue& rfJValue) -> JValue&
+  {
+    std::visit(
+        [this](auto&& data)
         {
-            return this->ToArray()[std::forward<T>(rfData)];
-        }
-        else
-        {
-            if constexpr (std::is_same_v<T, std::decay_t<JObject_t::key_type>> || std::is_bounded_array_v<std::remove_cvref_t<T>> || std::is_same_v<T_decay, char*> || std::is_same_v<T_decay, const char*>)
-            {
-                return this->ToObject()[std::forward<T>(rfData)];
-            }
-            else
-            {
-                return this->ToObject()[JObject_t::key_type{ rfData }];
-            }
-        }
-    }
+          using T_data = std::decay_t<decltype(data)>;
 
-    template <class T>
-    inline auto JValue::operator[](T&& rfData) const -> const JValue&
-    {
-        if constexpr (std::is_integral_v<T>)
-        {
-            return this->GetArray()[std::forward<T>(rfData)];
-        }
-        else
-        {
-            static_assert(false, "ZxJson::JValue::operator[]() const: error type.");
-        }
-    }
-
-    inline auto JValue::Move(JValue&& rfJValue) -> JValue&
-    {
-        this->m_Data = std::move(rfJValue.m_Data);
-        rfJValue.m_Data = JNull_t{};
-        return *this;
-    }
-
-    inline auto JValue::Copy(const JValue& rfJValue) -> JValue&
-    {
-        std::visit
-        (
-            [this](auto&& data)
-            {
-                using T_data = std::decay_t<decltype(data)>;
-
-                if constexpr (std::is_same_v<T_data, std::unique_ptr<JString_t>> || std::is_same_v<T_data, std::unique_ptr<JArray_t>> || std::is_same_v<T_data, std::unique_ptr<JObject_t>>)
-                {
-                    this->Assign(*data);
-                }
-                else if constexpr (std::is_same_v<T_data, JNull_t> || std::is_same_v<T_data, JBool_t> || std::is_same_v<T_data, JInt_t> || std::is_same_v<T_data, JDouble_t>)
-                {
-                    this->Assign(data);
-                }
-                else
-                {
-                    static_assert(false, "ZxJson::JValue::operator=<>(): error type!");
-                }
-            },
-            rfJValue.m_Data
-        );
-
-        return *this;
-    }
-
-    template<class T>
-    inline auto JValue::Assign(T&& rfData) -> JValue&
-    {
-        using T_decay = std::decay_t<decltype(rfData)>;
-
-        if constexpr (std::is_same_v<T_decay, JNull_t>)
-        {
-            m_Data = JNull_t{};
-        }
-        else if constexpr (std::is_floating_point_v<T_decay> || std::is_same_v<T_decay, JBool_t>)
-        {
-            m_Data = rfData;
-        }
-        else if constexpr (std::is_same_v<T, JValue&> || std::is_same_v<T, const JValue&>)
-        {
-            this->Copy(rfData);
-        }
-        else if constexpr (std::is_same_v<T, JValue>)
-        {
-            this->Move(std::move(rfData));
-        }
-        else if constexpr (std::is_integral_v<T_decay>)
-        {
-            m_Data = static_cast<JInt_t>(rfData);
-        }
-        else if constexpr (std::is_integral_v<T_decay>)
-        {
-            m_Data = static_cast<JInt_t>(rfData);
-        }
-        else if constexpr (std::is_bounded_array_v<std::remove_cvref_t<T>> || std::is_same_v<T_decay, char*> || std::is_same_v<T_decay, const char*>)
-        {
-            m_Data = std::make_unique<JString_t>(rfData);
-        }
-        else if constexpr (std::is_same_v<T_decay, std::string_view>)
-        {
-            m_Data = std::make_unique<JString_t>(rfData.data(), rfData.size());
-        }
-        else if constexpr (std::is_same_v<T_decay, JString_t> || std::is_same_v<T_decay, JArray_t> || std::is_same_v<T_decay, JObject_t>)
-        {
-            m_Data = std::make_unique<T_decay>(std::forward<T>(rfData));
-        }
-        else
-        {
+          if constexpr (std::is_same_v<T_data, std::unique_ptr<JString_t>> || std::is_same_v<T_data, std::unique_ptr<JArray_t>> || std::is_same_v<T_data, std::unique_ptr<JObject_t>>)
+          {
+            this->Assign(*data);
+          }
+          else if constexpr (std::is_same_v<T_data, JNull_t> || std::is_same_v<T_data, JBool_t> || std::is_same_v<T_data, JInt_t> || std::is_same_v<T_data, JDouble_t>)
+          {
+            this->Assign(data);
+          }
+          else
+          {
             static_assert(false, "ZxJson::JValue::operator=<>(): error type!");
-        }
+          }
+        },
+        rfJValue.m_Data);
 
-        return *this;
-    }
+    return *this;
+  }
 
-    inline auto JValue::GetBool() const -> bool
+  template <class T> inline auto JValue::Assign(T&& rfData) -> JValue&
+  {
+    using T_decay = std::decay_t<decltype(rfData)>;
+
+    if constexpr (std::is_same_v<T_decay, JNull_t>)
     {
-        assert(this->Check<JBool_t>());
-        return std::get<JBool_t>(m_Data);
+      m_Data = JNull_t{};
     }
-
-    template<class T>
-    inline auto JValue::GetNum() const -> T
+    else if constexpr (std::is_floating_point_v<T_decay> || std::is_same_v<T_decay, JBool_t>)
     {
-        assert(this->Check<JInt_t>());
-        return static_cast<T>(std::get<JInt_t>(m_Data));
+      m_Data = rfData;
     }
-
-    template<class T>
-    inline auto JValue::GetFloat() const -> T
+    else if constexpr (std::is_same_v<T, JValue&> || std::is_same_v<T, const JValue&>)
     {
-        assert(this->Check<JDouble_t>());
-        return static_cast<T>(std::get<JDouble_t>(m_Data));
+      this->Copy(rfData);
     }
-
-    inline auto JValue::GetStrView() const -> std::string_view
+    else if constexpr (std::is_same_v<T, JValue>)
     {
-        return this->GetStr();
+      this->Move(std::move(rfData));
     }
-
-    inline auto JValue::GetStr() -> std::string&
+    else if constexpr (std::is_integral_v<T_decay>)
     {
-        assert(this->Check<JString_t>());
-        return *std::get<std::unique_ptr<JString_t>>(m_Data);
+      m_Data = static_cast<JInt_t>(rfData);
     }
-
-    inline auto JValue::GetStr() const -> const std::string&
+    else if constexpr (std::is_integral_v<T_decay>)
     {
-        assert(this->Check<JString_t>());
-        return *std::get<std::unique_ptr<JString_t>>(m_Data);
+      m_Data = static_cast<JInt_t>(rfData);
     }
-
-    inline auto JValue::GetArray() -> JArray_t&
+    else if constexpr (std::is_bounded_array_v<std::remove_cvref_t<T>> || std::is_same_v<T_decay, char*> || std::is_same_v<T_decay, const char*>)
     {
-        assert(this->Check<JArray_t>());
-        return *std::get<std::unique_ptr<JArray_t>>(m_Data);
+      m_Data = std::make_unique<JString_t>(rfData);
     }
-
-    inline auto JValue::GetArray() const -> const JArray_t&
+    else if constexpr (std::is_same_v<T_decay, std::string_view>)
     {
-        assert(this->Check<JArray_t>());
-        return *std::get<std::unique_ptr<JArray_t>>(m_Data);
+      m_Data = std::make_unique<JString_t>(rfData.data(), rfData.size());
     }
-
-    inline auto JValue::GetObject() -> JObject_t&
+    else if constexpr (std::is_same_v<T_decay, JString_t> || std::is_same_v<T_decay, JArray_t> || std::is_same_v<T_decay, JObject_t>)
     {
-        assert(this->Check<JObject_t>());
-        return *std::get<std::unique_ptr<JObject_t>>(m_Data);
+      m_Data = std::make_unique<T_decay>(std::forward<T>(rfData));
     }
-
-    inline auto JValue::GetObject() const -> const JObject_t&
+    else
     {
-        assert(this->Check<JObject_t>());
-        return *std::get<std::unique_ptr<JObject_t>>(m_Data);
+      static_assert(false, "ZxJson::JValue::operator=<>(): error type!");
     }
 
-    template <class T>
-    inline auto JValue::At(T&& rfKeyorIndex) -> JValue&
+    return *this;
+  }
+
+  inline auto JValue::GetBool() const -> bool
+  {
+    assert(this->Check<JBool_t>());
+    return std::get<JBool_t>(m_Data);
+  }
+
+  template <class T> inline auto JValue::GetNum() const -> T
+  {
+    assert(this->Check<JInt_t>() || this->Check<JDouble_t>());
+    return this->Check<JInt_t>() ? static_cast<T>(std::get<JInt_t>(m_Data)) : static_cast<T>(std::get<JDouble_t>(m_Data));
+  }
+
+  template <class T> inline auto JValue::GetFloat() const -> T
+  {
+    return this->GetNum<T>();
+  }
+
+  inline auto JValue::GetStrView() const -> std::string_view
+  {
+    return this->GetStr();
+  }
+
+  inline auto JValue::GetStr() -> std::string&
+  {
+    assert(this->Check<JString_t>());
+    return *std::get<std::unique_ptr<JString_t>>(m_Data);
+  }
+
+  inline auto JValue::GetStr() const -> const std::string&
+  {
+    assert(this->Check<JString_t>());
+    return *std::get<std::unique_ptr<JString_t>>(m_Data);
+  }
+
+  inline auto JValue::GetArray() -> JArray_t&
+  {
+    assert(this->Check<JArray_t>());
+    return *std::get<std::unique_ptr<JArray_t>>(m_Data);
+  }
+
+  inline auto JValue::GetArray() const -> const JArray_t&
+  {
+    assert(this->Check<JArray_t>());
+    return *std::get<std::unique_ptr<JArray_t>>(m_Data);
+  }
+
+  inline auto JValue::GetObject() -> JObject_t&
+  {
+    assert(this->Check<JObject_t>());
+    return *std::get<std::unique_ptr<JObject_t>>(m_Data);
+  }
+
+  inline auto JValue::GetObject() const -> const JObject_t&
+  {
+    assert(this->Check<JObject_t>());
+    return *std::get<std::unique_ptr<JObject_t>>(m_Data);
+  }
+
+  template <class T> inline auto JValue::At(T&& rfKeyorIndex) -> JValue&
+  {
+    if constexpr (std::is_integral_v<T>)
     {
-        if constexpr (std::is_integral_v<T>)
-        {
-            if (!this->Check<JArray_t>()) { throw std::runtime_error("ZxJson::JValue::At(): not a array type!"); }
+      if (!this->Check<JArray_t>())
+      {
+        throw std::runtime_error("ZxJson::JValue::At(): not a array type!");
+      }
 
-            auto& jarray = this->GetArray();
-            if (jarray.size() > static_cast<std::size_t>(rfKeyorIndex))
-            {
-                return jarray[static_cast<std::size_t>(rfKeyorIndex)];
-            }
+      auto& jarray = this->GetArray();
+      if (jarray.size() > static_cast<std::size_t>(rfKeyorIndex))
+      {
+        return jarray[static_cast<std::size_t>(rfKeyorIndex)];
+      }
 
-            throw std::runtime_error("ZxJson::JValue::QueryKey(): out of idx!");
-        }
-        else
-        {
-            if (!this->Check<JObject_t>()) { throw std::runtime_error("ZxJson::JValue::At(): not a object type!"); }
-
-            auto& obj = this->GetObject();
-            if (auto ite = obj.find(std::forward<T>(rfKeyorIndex));ite != obj.end())
-            {
-                return ite->second;
-            }
-
-            throw std::runtime_error("ZxJson::JValue::QueryKey(): not find key!");
-        }
+      throw std::runtime_error("ZxJson::JValue::QueryKey(): out of idx!");
     }
-
-    template <class T>
-    inline auto JValue::At(T&& rfKeyorIndex) const -> const JValue&
+    else
     {
-        if constexpr (std::is_integral_v<T>)
-        {
-            if (!this->Check<JArray_t>()) { throw std::runtime_error("ZxJson::JValue::At() const: not a array type!"); }
+      if (!this->Check<JObject_t>())
+      {
+        throw std::runtime_error("ZxJson::JValue::At(): not a object type!");
+      }
 
-            const auto& jarray = this->GetArray();
-            if (jarray.size() > static_cast<std::size_t>(rfKeyorIndex))
-            {
-                return jarray[static_cast<std::size_t>(rfKeyorIndex)];
-            }
+      auto& obj = this->GetObject();
+      if (auto ite = obj.find(std::forward<T>(rfKeyorIndex)); ite != obj.end())
+      {
+        return ite->second;
+      }
 
-            throw std::runtime_error("ZxJson::JValue::QueryKey(): not find idx!");
-        }
-        else
-        {
-            if (!this->Check<JObject_t>()) { throw std::runtime_error("ZxJson::JValue::At() const: not a object type!"); }
-
-            const auto& obj = this->GetObject();
-            if (const auto ite = obj.find(std::forward<T>(rfKeyorIndex));ite != obj.end())
-            {
-                return ite->second;
-            }
-
-            throw std::runtime_error("ZxJson::JValue::QueryKey() const: not find key!");
-        }
+      throw std::runtime_error("ZxJson::JValue::QueryKey(): not find key!");
     }
+  }
 
-    template <class T>
-    inline auto JValue::Check() const -> bool
+  template <class T> inline auto JValue::At(T&& rfKeyorIndex) const -> const JValue&
+  {
+    if constexpr (std::is_integral_v<T>)
     {
-        if constexpr (std::is_same_v<T, JNull_t> || std::is_same_v<T, JBool_t> || std::is_same_v<T, JInt_t> || std::is_same_v<T, JDouble_t>)
-        {
-            return std::holds_alternative<T>(m_Data);
-        }
-        else if constexpr (std::is_same_v<T, JString_t> || std::is_same_v<T, JArray_t> || std::is_same_v<T, JObject_t>)
-        {
-            return std::holds_alternative<std::unique_ptr<T>>(m_Data);
-        }
-        else
-        {
-            static_assert(false, "ZxJson::JValue::Check(): error type!");
-        }
-    }
+      if (!this->Check<JArray_t>())
+      {
+        throw std::runtime_error("ZxJson::JValue::At() const: not a array type!");
+      }
 
-    inline auto JValue::Clear() -> void
+      const auto& jarray = this->GetArray();
+      if (jarray.size() > static_cast<std::size_t>(rfKeyorIndex))
+      {
+        return jarray[static_cast<std::size_t>(rfKeyorIndex)];
+      }
+
+      throw std::runtime_error("ZxJson::JValue::QueryKey(): not find idx!");
+    }
+    else
     {
-        m_Data = {};
-    }
+      if (!this->Check<JObject_t>())
+      {
+        throw std::runtime_error("ZxJson::JValue::At() const: not a object type!");
+      }
 
-    inline auto JValue::ToArray() -> JArray_t&
+      const auto& obj = this->GetObject();
+      if (const auto ite = obj.find(std::forward<T>(rfKeyorIndex)); ite != obj.end())
+      {
+        return ite->second;
+      }
+
+      throw std::runtime_error("ZxJson::JValue::QueryKey() const: not find key!");
+    }
+  }
+
+  template <class T> inline auto JValue::Check() const -> bool
+  {
+    if constexpr (std::is_same_v<T, JNull_t> || std::is_same_v<T, JBool_t> || std::is_same_v<T, JInt_t> || std::is_same_v<T, JDouble_t>)
     {
-        if (this->Check<JNull_t>())
-        {
-            m_Data = std::make_unique<JArray_t>();
-        }
-        else if (!this->Check<JArray_t>())
-        {
-            throw std::runtime_error("ZxJson::JValue::ToArray(): error!");
-        }
-
-        return this->GetArray();
+      return std::holds_alternative<T>(m_Data);
     }
-
-    inline auto JValue::ToObject() -> JObject_t&
+    else if constexpr (std::is_same_v<T, JString_t> || std::is_same_v<T, JArray_t> || std::is_same_v<T, JObject_t>)
     {
-        if (this->Check<JNull_t>())
-        {
-            m_Data = std::make_unique<JObject_t>();
-        }
-        else if (!this->Check<JObject_t>())
-        {
-            throw std::runtime_error("ZxJson::JValue::ToObject(): error!");
-        }
-
-        return this->GetObject();
+      return std::holds_alternative<std::unique_ptr<T>>(m_Data);
     }
+    else
+    {
+      static_assert(false, "ZxJson::JValue::Check(): error type!");
+    }
+  }
+
+  inline auto JValue::Clear() -> void
+  {
+    m_Data = {};
+  }
+
+  inline auto JValue::ToArray() -> JArray_t&
+  {
+    if (this->Check<JNull_t>())
+    {
+      m_Data = std::make_unique<JArray_t>();
+    }
+    else if (!this->Check<JArray_t>())
+    {
+      throw std::runtime_error("ZxJson::JValue::ToArray(): error!");
+    }
+
+    return this->GetArray();
+  }
+
+  inline auto JValue::ToObject() -> JObject_t&
+  {
+    if (this->Check<JNull_t>())
+    {
+      m_Data = std::make_unique<JObject_t>();
+    }
+    else if (!this->Check<JObject_t>())
+    {
+      throw std::runtime_error("ZxJson::JValue::ToObject(): error!");
+    }
+
+    return this->GetObject();
+  }
 
 } // namespace ZQF::Zut::ZxJson

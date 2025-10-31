@@ -1,8 +1,13 @@
 {
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "name": "zqf-zxjson",
   "version": "1.0",
   "dependencies": [
-    "zqf-cmake-modules"
+    "zqf-cmake-modules",
+    {
+      "name":"catch2",
+      "version>=":"3.11.0"
+    }
   ],
   "vcpkg-configuration": {
     "default-registry": {

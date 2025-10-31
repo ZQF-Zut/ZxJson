@@ -1,7 +1,10 @@
-project(zqf_zut_zxjson_tryout VERSION 1.0 LANGUAGES C CXX)
+# Project
+project("zqf_zxjson_test" VERSION 1.0 LANGUAGES C CXX)
 
-# Test Project
+# Executable
 add_executable(${PROJECT_NAME} "main.cpp")
+
+# Compiler
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
 target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>:/utf-8>)
 
@@ -10,5 +13,10 @@ target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:MSVC>,$<CX
 target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:GNU>>:-Wall -Wextra>)
 target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:Clang>>:-Wall -Wextra>)
 
-# Add Library
-target_link_libraries("${PROJECT_NAME}" PRIVATE ZQF::Zut::ZxJson)
+# External Libraries
+find_package(Catch2 CONFIG)
+target_link_libraries(${PROJECT_NAME} PRIVATE Catch2::Catch2 Catch2::Catch2WithMain ZQF::Zut::ZxJson)
+
+# Testing
+include(Catch)
+catch_discover_tests("zqf_zxjson_test")

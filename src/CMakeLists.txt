@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.25)
-
 # Project Name
 project(zqf_zut_zxjson VERSION 1.0 LANGUAGES C CXX)
 
@@ -21,6 +19,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:MSVC>,$<CX
 # Warning
 target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>:/W4>)
 target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:GNU>>:-Wall -Wextra>)
+target_compile_options(${PROJECT_NAME} PRIVATE $<$<OR:$<C_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:Clang>>:-Wall -Wextra>)
 
 # Properties
 set_target_properties(${PROJECT_NAME} PROPERTIES EXPORT_NAME ZxJson)

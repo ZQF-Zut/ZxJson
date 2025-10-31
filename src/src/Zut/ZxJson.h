@@ -5,8 +5,7 @@
 #include <Zut/ZxJson/JIO.h>
 #include <Zut/ZxJson/JReflex.h>
 
-
 namespace ZxJson
 {
-    using namespace ZQF::Zut::ZxJson;
-}
+  using namespace ZQF::Zut::ZxJson;
+} // namespace ZxJson
