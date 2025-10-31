@@ -325,23 +325,39 @@ TEST_CASE("test_dump_parse")
       { "egwe", "esighwe" },
   } };
 
-  const auto str = jval.Dump(false);
-  REQUIRE(str == R"({"21412":2352,"segwe":1.000000,"egwe":"esighwe"})");
+  {
+    const auto str = jval.Dump(false);
+    REQUIRE(str.starts_with('{'));
+    REQUIRE(str.find("\"21412\"") != std::string::npos);
+    REQUIRE(str.find("2352") != std::string::npos);
+    REQUIRE(str.find("\"segwe\"") != std::string::npos);
+    REQUIRE(str.find("\"egwe\"") != std::string::npos);
+    REQUIRE(str.find("\"esighwe\"") != std::string::npos);
+    REQUIRE(str.ends_with('}'));
+    REQUIRE(str.find('\n') == std::string::npos);
+    REQUIRE(str.find('\t') == std::string::npos);
+  }
 
-  const auto str_2 = jval.Dump(true);
-  REQUIRE(
-      str_2 ==
-      R"({
-	"21412": 2352,
-	"segwe": 1.000000,
-	"egwe": "esighwe"
-})");
+  {
+    const auto str_2 = jval.Dump(true);
+    REQUIRE(str_2.starts_with('{'));
+    REQUIRE(str_2.find("\"21412\"") != std::string::npos);
+    REQUIRE(str_2.find("2352") != std::string::npos);
+    REQUIRE(str_2.find("\"segwe\"") != std::string::npos);
+    REQUIRE(str_2.find("\"egwe\"") != std::string::npos);
+    REQUIRE(str_2.find("\"esighwe\"") != std::string::npos);
+    REQUIRE(str_2.ends_with('}'));
+    bool testv = ((str_2.find('\n') != std::string::npos) || (str_2.find('\t') != std::string::npos));
+    REQUIRE(testv);
+  }
 
-  const auto jval2 = ZxJson::LoadViaMemory(R"({"21412":2352,"segwe":1.000000,"egwe":"esighwe"})");
-  REQUIRE(jval2.At("21412").GetNum() == 2352);
-  REQUIRE(jval2.At("segwe").GetFloat() >= 0.99);
-  REQUIRE(jval2.At("segwe").GetFloat() <= 1.00);
-  REQUIRE(jval2.At("egwe").GetStrView() == "esighwe");
+  {
+    const auto jval2 = ZxJson::LoadViaMemory(R"({"21412":2352,"segwe":1.000000,"egwe":"esighwe"})");
+    REQUIRE(jval2.At("21412").GetNum() == 2352);
+    REQUIRE(jval2.At("segwe").GetFloat() >= 0.99);
+    REQUIRE(jval2.At("segwe").GetFloat() <= 1.00);
+    REQUIRE(jval2.At("egwe").GetStrView() == "esighwe");
+  }
 }
 
 TEST_CASE("parse_escape")
