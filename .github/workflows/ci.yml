@@ -30,25 +30,25 @@ jobs:
     - name: testing
       run: ctest --test-dir .build/windows-msvc-x86-64-${{ matrix.config }}
 
-  # build_and_test_ubuntu:
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       config: [debug, release]
+  ubuntu_x64:
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [gcc-x86-64-debug, gcc-x86-64-release, clang-x86-64-debug, clang-x86-64-release]
 
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: check
-  #     uses: actions/checkout@v4
+    runs-on: ubuntu-latest
+    steps:
+    - name: check
+      uses: actions/checkout@v4
 
-  #   - name: setup
-  #     run: sudo apt update && sudo apt install -y build-essential
+    - name: setup
+      run: sudo apt update && sudo apt install -y clang cmake ninja-build
 
-  #   - name: config
-  #     run: cmake --preset=linux-gcc-x86-64-debug -DZQF_DOXYGEN=OFF
+    - name: config
+      run: cmake --preset=linux-${{ matrix.config }} -DZQF_DOXYGEN=OFF
 
-  #   - name: build
-  #     run: cmake --build .build/linux-gcc-x86-64-debug
+    - name: build
+      run: cmake --build .build/linux-${{ matrix.config }}
 
-  #   - name: testing
-  #     run: ctest --test-dir .build/linux-gcc-x86-64-debug
+    - name: testing
+      run: ctest --test-dir .build/linux-${{ matrix.config }}

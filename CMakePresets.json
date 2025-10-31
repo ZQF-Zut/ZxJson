@@ -48,6 +48,20 @@
       }
     },
     {
+      "name": "linux-clang-base",
+      "inherits": "config-base",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
       "name": "macos-clang-base",
       "inherits": "config-base",
       "hidden": true,
@@ -224,6 +238,30 @@
       "name": "linux-gcc-x86-64-release",
       "displayName": "Linux GCC x86-64 Release",
       "inherits": "linux-gcc-base",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "linux-clang-x86-64-debug",
+      "displayName": "Linux Clang x86-64 Debug",
+      "inherits": "linux-clang-base",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "linux-clang-x86-64-release",
+      "displayName": "Linux Clang x86-64 Release",
+      "inherits": "linux-clang-base",
       "architecture": {
         "value": "x64",
         "strategy": "external"
