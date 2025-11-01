@@ -13,21 +13,21 @@ jobs:
 
     runs-on: windows-2022
     steps:
-    - name: check
+    - name: Checkout
       uses: actions/checkout@v4
 
-    - name: setup
+    - name: Setup
       uses: ilammy/msvc-dev-cmd@v1
       with:
         arch: x64
 
-    - name: config
+    - name: Config
       run: cmake --preset=win-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVMODE=OFF
 
-    - name: build
+    - name: Build
       run: cmake --build .build/win-${{ matrix.config }}
 
-    - name: testing
+    - name: Testing
       run: ctest --test-dir .build/win-${{ matrix.config }}
 
   windows_arm64:
@@ -38,21 +38,21 @@ jobs:
 
     runs-on: windows-11-arm
     steps:
-    - name: check
+    - name: Checkout
       uses: actions/checkout@v4
 
-    - name: setup
+    - name: Setup
       uses: ilammy/msvc-dev-cmd@v1
       with:
         arch: arm64
 
-    - name: config
+    - name: Config
       run: cmake --preset=win-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVMODE=OFF
 
-    - name: build
+    - name: Build
       run: cmake --build .build/win-${{ matrix.config }}
 
-    - name: testing
+    - name: Testing
       run: ctest --test-dir .build/win-${{ matrix.config }}
 
   ubuntu_x64:
@@ -63,17 +63,17 @@ jobs:
 
     runs-on: ubuntu-24.04
     steps:
-    - name: check
+    - name: Checkout
       uses: actions/checkout@v4
 
-    - name: setup
+    - name: Setup
       run: sudo apt-get update && sudo apt-get install -y clang cmake ninja-build
 
-    - name: config
+    - name: Config
       run: cmake --preset=linux-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVMODE=OFF
 
-    - name: build
+    - name: Build
       run: cmake --build .build/linux-${{ matrix.config }}
 
-    - name: testing
+    - name: Testing
       run: ctest --test-dir .build/linux-${{ matrix.config }}
