@@ -1,0 +1,82 @@
+{
+  "version": 6,
+  "include": [
+    "base.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "win-msvc-x64-dbg",
+      "displayName": "Windows MSVC x86-64 Debug",
+      "inherits": "win-msvc-base",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "win-msvc-x64-dbg-mt",
+      "displayName": "Windows MSVC x86-64 Debug MT",
+      "inherits": "win-msvc-x64-dbg",
+      "cacheVariables": {
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDebug",
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static"
+      }
+    },
+    {
+      "name": "win-msvc-x64-rel",
+      "displayName": "Windows MSVC x86-64 Release",
+      "inherits": "win-msvc-base",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "win-msvc-x64-rel-mt",
+      "displayName": "Windows MSVC x86-64 Release MT",
+      "inherits": "win-msvc-x64-rel",
+      "cacheVariables": {
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded",
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static"
+      }
+    },
+    {
+      "name": "win-msvc-x64-msr",
+      "displayName": "Windows MSVC x86-64 MinSizeRel",
+      "inherits": "win-msvc-x64-rel",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel"
+      }
+    },
+    {
+      "name": "win-msvc-x64-msr-mt",
+      "displayName": "Windows MSVC x86-64 MinSizeRel MT",
+      "inherits": "win-msvc-x64-rel-mt",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel"
+      }
+    },
+    {
+      "name": "win-msvc-x64-rwi",
+      "displayName": "Windows MSVC x86-64 RelWithDebInfo",
+      "inherits": "win-msvc-x64-rel",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    },
+    {
+      "name": "win-msvc-x64-rwi-mt",
+      "displayName": "Windows MSVC x86-64 RelWithDebInfo MT",
+      "inherits": "win-msvc-x64-rel-mt",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    }
+  ]
+}

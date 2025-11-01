@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config: [debug, debug-mt, release, release-mt]
+        config: [msvc-x64-dbg, msvc-x64-rel, msvc-x64-dbg-mt, msvc-x64-rel-mt, clang-cl-x64-dbg, clang-cl-x64-rel, clang-cl-x64-dbg-mt, clang-cl-x64-rel-mt]
 
     runs-on: windows-2022
     steps:
@@ -18,31 +18,52 @@ jobs:
 
     - name: setup
       uses: ilammy/msvc-dev-cmd@v1
-      with:
-        arch: x64
 
     - name: config
-      run: cmake --preset=windows-msvc-x86-64-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVMODE=OFF
+      run: cmake --preset=win-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVMODE=OFF
 
     - name: build
-      run: cmake --build .build/windows-msvc-x86-64-${{ matrix.config }}
+      run: cmake --build .build/win-${{ matrix.config }}
 
     - name: testing
-      run: ctest --test-dir .build/windows-msvc-x86-64-${{ matrix.config }}
+      run: ctest --test-dir .build/win-${{ matrix.config }}
 
-  ubuntu_x64:
+  windows_arm64:
     strategy:
       fail-fast: false
       matrix:
-        config: [gcc-x86-64-debug, gcc-x86-64-release, clang-x86-64-debug, clang-x86-64-release]
+        config: [msvc-arm64-dbg, msvc-arm64-rel, msvc-arm64-dbg-mt, msvc-arm64-rel-mt]
 
-    runs-on: ubuntu-latest
+    runs-on: windows-11-arm
     steps:
     - name: check
       uses: actions/checkout@v4
 
     - name: setup
-      run: sudo apt-get update && sudo apt-get install -y clang cmake ninja-build pkg-config curl git
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: config
+      run: cmake --preset=win-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVMODE=OFF
+
+    - name: build
+      run: cmake --build .build/win-${{ matrix.config }}
+
+    - name: testing
+      run: ctest --test-dir .build/win-${{ matrix.config }}
+
+  ubuntu_x64:
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [gcc-x64-dbg, gcc-x64-rel, clang-x64-dbg, clang-x64-rel]
+
+    runs-on: ubuntu-24.04
+    steps:
+    - name: check
+      uses: actions/checkout@v4
+
+    - name: setup
+      run: sudo apt-get update && sudo apt-get install -y clang cmake ninja-build
 
     - name: config
       run: cmake --preset=linux-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVMODE=OFF

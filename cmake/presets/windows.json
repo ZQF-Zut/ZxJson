@@ -1,0 +1,9 @@
+{
+  "version": 6,
+  "include": [
+    "windows-msvc-x64.json",
+    "windows-msvc-x86.json",
+    "windows-msvc-arm64.json",
+    "windows-clang-cl-x64.json"
+  ]
+}

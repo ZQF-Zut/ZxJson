@@ -1,0 +1,41 @@
+{
+  "version": 6,
+  "include": [
+    "base.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "mingw-gcc-x64-dbg",
+      "displayName": "MinGW GCC x64 Debug",
+      "inherits": "mingw-gcc-base",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "mingw-gcc-x64-rel",
+      "displayName": "MinGW GCC x64 Release",
+      "inherits": "mingw-gcc-base",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "mingw-gcc-x64-rel-static",
+      "displayName": "MinGW GCC x64 Release Static",
+      "inherits": "mingw-gcc-x64-rel",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "ZQF_MINGW_STATIC_LINK": true
+      }
+    }
+  ]
+}
