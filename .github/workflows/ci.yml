@@ -18,6 +18,8 @@ jobs:
 
     - name: setup
       uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: x64
 
     - name: config
       run: cmake --preset=win-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVMODE=OFF
@@ -41,6 +43,8 @@ jobs:
 
     - name: setup
       uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: arm64
 
     - name: config
       run: cmake --preset=win-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVMODE=OFF
