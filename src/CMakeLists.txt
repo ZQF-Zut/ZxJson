@@ -27,7 +27,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE
 set_target_properties(${PROJECT_NAME} PROPERTIES EXPORT_NAME ZxJson)
 
 # Install
-include("ZQF_Installer")
+include("zqf_installer")
 zqf_installer(
   ${PROJECT_NAME}
   NAMESPACE "ZQF::Zut"
@@ -37,6 +37,6 @@ zqf_installer(
 
 # Doc
 if(ZQF_DOXYGEN)
-  include("ZQF_Doxygen")
+  include("zqf_doxygen")
   zqf_doxygen(${PROJECT_NAME})
 endif()
