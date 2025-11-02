@@ -5,9 +5,13 @@
   },
   "version": 6,
   "include": [
-    "cmake/presets/windows.json",
-    "cmake/presets/linux.json",
-    "cmake/presets/macos.json",
-    "cmake/presets/mingw.json"
+    "cmake/presets/windows-msvc-x64.json",
+    "cmake/presets/windows-msvc-x86.json",
+    "cmake/presets/windows-msvc-arm64.json",
+    "cmake/presets/windows-clang-cl-x64.json",
+    "cmake/presets/linux-gcc-x64.json",
+    "cmake/presets/linux-clang-x64.json",
+    "cmake/presets/macos-clang-x64.json",
+    "cmake/presets/mingw-gcc-x64.json"
   ]
 }

@@ -5,9 +5,9 @@
   ],
   "configurePresets": [
     {
-      "name": "win-msvc-x86-dbg",
+      "name": "windows-msvc-x86-dbg",
       "displayName": "Windows MSVC x86 Debug",
-      "inherits": "win-msvc-base",
+      "inherits": "windows-msvc-base",
       "architecture": {
         "value": "x86",
         "strategy": "external"
@@ -17,9 +17,9 @@
       }
     },
     {
-      "name": "win-msvc-x86-rel",
+      "name": "windows-msvc-x86-rel",
       "displayName": "Windows MSVC x86 Release",
-      "inherits": "win-msvc-base",
+      "inherits": "windows-msvc-base",
       "architecture": {
         "value": "x86",
         "strategy": "external"
@@ -29,26 +29,26 @@
       }
     },
     {
-      "name": "win-msvc-x86-rel-mt",
+      "name": "windows-msvc-x86-rel-mt",
       "displayName": "Windows MSVC x86 Release MT",
-      "inherits": "win-msvc-x86-rel",
+      "inherits": "windows-msvc-x86-rel",
       "cacheVariables": {
         "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded",
-        "VCPKG_TARGET_TRIPLET": "x64-win-static"
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static"
       }
     },
     {
-      "name": "win-msvc-x86-msr-mt",
+      "name": "windows-msvc-x86-msr-mt",
       "displayName": "Windows MSVC x86 MinSizeRel MT",
-      "inherits": "win-msvc-x86-rel-mt",
+      "inherits": "windows-msvc-x86-rel-mt",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "MinSizeRel"
       }
     },
     {
-      "name": "win-msvc-x86-rwi-mt",
+      "name": "windows-msvc-x86-rwi-mt",
       "displayName": "Windows MSVC x86 RelWithDebInfo MT",
-      "inherits": "win-msvc-x86-rel-mt",
+      "inherits": "windows-msvc-x86-rel-mt",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo"
       }

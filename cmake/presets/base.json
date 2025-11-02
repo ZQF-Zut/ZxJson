@@ -18,7 +18,7 @@
       }
     },
     {
-      "name": "win-msvc-base",
+      "name": "windows-msvc-base",
       "inherits": "config-base",
       "hidden": true,
       "cacheVariables": {
@@ -32,7 +32,7 @@
       }
     },
     {
-      "name": "win-clang-cl-base",
+      "name": "windows-clang-cl-base",
       "inherits": "config-base",
       "hidden": true,
       "cacheVariables": {
