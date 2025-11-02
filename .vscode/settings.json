@@ -9,6 +9,7 @@
         "editor.formatOnSave": true,
         "editor.formatOnPaste": false,
     },
+    "search.useIgnoreFiles": false,
     // lldb
     "lldb.displayFormat": "hex",
     // xmake

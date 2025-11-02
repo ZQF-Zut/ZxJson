@@ -2,8 +2,7 @@ cmake_minimum_required(VERSION 3.31)
 
 # VCPKG
 if(ZQF_VCPKG)
-  include("cmake/ZQF_VCPKG.cmake")
-  zqf_vcpkg_startup()
+ include("cmake/modules/zqf_vcpkg.cmake")
 endif()
 
 # Project
@@ -14,7 +13,8 @@ find_package(zqf_cmake_modules CONFIG REQUIRED)
 
 # Config
 if(ZQF_DEVMODE)
-  include("ZQF_Settings")
+  include("zqf_settings")
+  include("zqf_profiles")
 endif()
 
 # Source
