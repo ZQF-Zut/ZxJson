@@ -67,7 +67,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Setup
-      run: sudo apt-get update && sudo apt-get install -y clang cmake ninja-build
+      run: sudo apt-get update && sudo apt-get install -y gcc g++ clang cmake ninja-build
 
     - name: Config
       run: cmake --preset=linux-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVELOP=OFF
