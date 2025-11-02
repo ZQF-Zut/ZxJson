@@ -11,7 +11,7 @@
         "CMAKE_EXPORT_COMPILE_COMMANDS": true,
         "CMAKE_CATCH_DISCOVER_TESTS_DISCOVERY_MODE": "PRE_TEST",
         "VCPKG_INSTALL_OPTIONS": "--no-print-usage",
-        "ZQF_DEVMODE": true,
+        "ZQF_DEVELOP": true,
         "ZQF_TESTING": true,
         "ZQF_DOXYGEN": true,
         "ZQF_VCPKG": true

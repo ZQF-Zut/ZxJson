@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.31)
 
 # VCPKG
 if(ZQF_VCPKG)
- include("cmake/vcpkg/zqf_vcpkg.cmake")
+  include("cmake/vcpkg/zqf_vcpkg.cmake")
 endif()
 
 # Project
@@ -12,7 +12,7 @@ project(zqf_zut_zxjson_main)
 find_package(zqf_cmake_modules CONFIG REQUIRED)
 
 # Config
-if(ZQF_DEVMODE)
+if(ZQF_DEVELOP)
   include("zqf_settings")
   include("zqf_profiles")
 endif()
@@ -21,7 +21,7 @@ endif()
 add_subdirectory("src")
 
 # Dev
-if(ZQF_DEVMODE)
+if(ZQF_DEVELOP)
   add_subdirectory("tryout")
 endif()
 
