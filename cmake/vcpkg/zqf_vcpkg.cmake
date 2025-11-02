@@ -1,12 +1,14 @@
 include_guard(GLOBAL)
 
-if(Z_VCPKG_ROOT_DIR)
-  return()
-endif()
-
 function(zqf_vcpkg_fetch)
+  set(zqf_vcpkg_root_dir "${CMAKE_SOURCE_DIR}/.vcpkg")
+
+  if(EXISTS zqf_vcpkg_root_dir)
+    set(zqf_vcpkg_root_dir "${zqf_vcpkg_root_dir}" PARENT_SCOPE)
+    return()
+  endif()
+
   set(zqf_vcpkg_tool_release_url "https://github.com/microsoft/vcpkg-tool/releases/download/2025-09-03")
-  set(zqf_vcpkg_root_dir "${CMAKE_BINARY_DIR}/vcpkg")
 
   if(WIN32)
     file(WRITE "${zqf_vcpkg_root_dir}/.vcpkg-root")
@@ -18,8 +20,14 @@ function(zqf_vcpkg_fetch)
     execute_process(COMMAND bash -c "VCPKG_ROOT=\"${zqf_vcpkg_root_dir}\" && . \"${zqf_vcpkg_root_dir}/vcpkg-init\"")
   endif()
 
-  set(zqf_vcpkg_cmake_file_path "${zqf_vcpkg_root_dir}/scripts/buildsystems/vcpkg.cmake" PARENT_SCOPE)
+  set(zqf_vcpkg_root_dir "${zqf_vcpkg_root_dir}" PARENT_SCOPE)
 endfunction()
 
-zqf_vcpkg_fetch()
-include("${zqf_vcpkg_cmake_file_path}")
+if(Z_VCPKG_ROOT_DIR)
+  set(zqf_vcpkg_root_dir "${Z_VCPKG_ROOT_DIR}")
+else()
+  zqf_vcpkg_fetch()
+  set(VCPKG_MANIFEST_DIR "${CMAKE_CURRENT_LIST_DIR}")
+endif()
+
+include("${zqf_vcpkg_root_dir}/scripts/buildsystems/vcpkg.cmake")

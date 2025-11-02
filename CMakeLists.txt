@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.31)
 
 # VCPKG
 if(ZQF_VCPKG)
- include("cmake/modules/zqf_vcpkg.cmake")
+ include("cmake/vcpkg/zqf_vcpkg.cmake")
 endif()
 
 # Project
