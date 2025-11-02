@@ -22,7 +22,7 @@ jobs:
         arch: x64
 
     - name: Config
-      run: cmake --preset=win-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVMODE=OFF
+      run: cmake --preset=win-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVELOP=OFF
 
     - name: Build
       run: cmake --build .build/win-${{ matrix.config }}
@@ -47,7 +47,7 @@ jobs:
         arch: arm64
 
     - name: Config
-      run: cmake --preset=win-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVMODE=OFF
+      run: cmake --preset=win-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVELOP=OFF
 
     - name: Build
       run: cmake --build .build/win-${{ matrix.config }}
@@ -70,7 +70,7 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y clang cmake ninja-build
 
     - name: Config
-      run: cmake --preset=linux-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVMODE=OFF
+      run: cmake --preset=linux-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVELOP=OFF
 
     - name: Build
       run: cmake --build .build/linux-${{ matrix.config }}
