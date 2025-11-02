@@ -1,5 +1,5 @@
 # Project
-project("zqf_zxjson_test" VERSION 1.0 LANGUAGES C CXX)
+project("zqf_zut_zxjson_test" VERSION 1.0 LANGUAGES C CXX)
 
 # Executable
 add_executable(${PROJECT_NAME} "main.cpp")
@@ -21,4 +21,4 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Catch2::Catch2 Catch2::Catch2WithM
 
 # Testing
 include(Catch)
-catch_discover_tests("zqf_zxjson_test")
+catch_discover_tests(${PROJECT_NAME})
