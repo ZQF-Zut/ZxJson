@@ -28,9 +28,13 @@ namespace ZQF::Zut::ZxJson::Plat
     (void)::GetFileSizeEx(hfile, &file_size_large);
     const auto file_size = static_cast<std::size_t>(file_size_large.QuadPart);
     auto file_buffer = std::make_unique_for_overwrite<char[]>(file_size); // NOLINT
-    DWORD read{};
-    (void)::ReadFile(hfile, file_buffer.get(), static_cast<DWORD>(file_size), &read, nullptr);
+    DWORD read_bytes{};
+    (void)::ReadFile(hfile, file_buffer.get(), static_cast<DWORD>(file_size), &read_bytes, nullptr);
     (void)::CloseHandle(hfile);
+    if (read_bytes != file_size)
+    {
+      throw std::runtime_error(std::string{ "ZxJson::RreadAllBytes(): read file error! -> msPath: " }.append(msPath));
+    }
     return { file_size, std::unique_ptr<char[]>{ std::move(file_buffer) } }; // NOLINT
   }
 
@@ -41,9 +45,13 @@ namespace ZQF::Zut::ZxJson::Plat
     {
       throw std::runtime_error(std::string{ "ZxJson::WriteAllBytes(): create file error! -> msPath: " }.append(msPath));
     }
-    DWORD write{};
-    (void)::WriteFile(hfile, spData.data(), static_cast<DWORD>(spData.size_bytes()), &write, nullptr);
+    DWORD write_bytes{};
+    (void)::WriteFile(hfile, spData.data(), static_cast<DWORD>(spData.size_bytes()), &write_bytes, nullptr);
     (void)::CloseHandle(hfile);
+    if (write_bytes != static_cast<DWORD>(spData.size_bytes()))
+    {
+      throw std::runtime_error(std::string{ "ZxJson::RreadAllBytes(): read file error! -> msPath: " }.append(msPath));
+    }
   }
 } // namespace ZQF::Zut::ZxJson::Plat
 #elif __linux__
@@ -62,8 +70,12 @@ namespace ZQF::Zut::ZxJson::Plat
     const auto file_size = ::lseek(file_handle, 0, SEEK_END);
     auto buffer = std::make_unique_for_overwrite<char[]>(file_size);
     ::lseek(file_handle, 0, SEEK_SET);
-    ::read(file_handle, buffer.get(), file_size);
+    const auto read_bytes = ::read(file_handle, buffer.get(), file_size);
     ::close(file_handle);
+    if (read_bytes != file_size)
+    {
+      throw std::runtime_error(std::string{ "ZxJson::RreadAllBytes(): read file error! -> msPath: " }.append(msPath));
+    }
     return { file_size, std::unique_ptr<char[]>{ std::move(buffer) } };
   }
 
@@ -76,8 +88,12 @@ namespace ZQF::Zut::ZxJson::Plat
     {
       throw std::runtime_error(std::string{ "ZxJson::WriteAllBytes(): create file failed! -> msPath: " }.append(msPath));
     }
-    ::write(file_handle, spData.data(), spData.size_bytes());
+    const auto write_bytes = ::write(file_handle, spData.data(), spData.size_bytes());
     ::close(file_handle);
+    if (static_cast<std::size_t>(write_bytes) != spData.size_bytes())
+    {
+      throw std::runtime_error(std::string{ "ZxJson::WriteAllBytes(): write file error! -> msPath: " }.append(msPath));
+    }
   }
 } // namespace ZQF::Zut::ZxJson::Plat
 #endif
