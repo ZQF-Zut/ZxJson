@@ -5,21 +5,22 @@
   ],
   "configurePresets": [
     {
-      "name": "linux-clang-x64-dbg",
-      "displayName": "Linux Clang x64 Debug",
+      "name": "linux-clang-arm64-dbg",
+      "displayName": "Linux Clang ARM64 Debug",
       "inherits": "linux-clang-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "VCPKG_TARGET_TRIPLET": "x64-linux"
+        "CMAKE_SYSTEM_PROCESSOR": "arm64",
+        "VCPKG_TARGET_TRIPLET": "arm64-linux"
       }
     },
     {
-      "name": "linux-clang-x64-rel",
-      "displayName": "Linux Clang x64 Release",
+      "name": "linux-clang-arm64-rel",
+      "displayName": "Linux Clang ARM64 Release",
       "inherits": "linux-clang-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "VCPKG_TARGET_TRIPLET": "x64-linux"
+        "VCPKG_TARGET_TRIPLET": "arm64-linux"
       }
     }
   ]

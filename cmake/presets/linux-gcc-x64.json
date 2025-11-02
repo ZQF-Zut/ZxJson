@@ -8,10 +8,6 @@
       "name": "linux-gcc-x64-dbg",
       "displayName": "Linux GCC x64 Debug",
       "inherits": "linux-gcc-base",
-      "architecture": {
-        "value": "x64",
-        "strategy": "external"
-      },
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "VCPKG_TARGET_TRIPLET": "x64-linux"
@@ -21,10 +17,6 @@
       "name": "linux-gcc-x64-rel",
       "displayName": "Linux GCC x64 Release",
       "inherits": "linux-gcc-base",
-      "architecture": {
-        "value": "x64",
-        "strategy": "external"
-      },
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "VCPKG_TARGET_TRIPLET": "x64-linux"

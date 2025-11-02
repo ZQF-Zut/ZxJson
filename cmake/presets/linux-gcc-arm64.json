@@ -1,0 +1,28 @@
+{
+  "version": 6,
+  "include": [
+    "base.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "linux-gcc-arm64-dbg",
+      "displayName": "Linux GCC ARM64 Debug",
+      "inherits": "linux-gcc-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_SYSTEM_PROCESSOR": "arm64",
+        "VCPKG_TARGET_TRIPLET": "arm-linux"
+      }
+    },
+    {
+      "name": "linux-gcc-arm64-rel",
+      "displayName": "Linux GCC ARM64 Release",
+      "inherits": "linux-gcc-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_SYSTEM_PROCESSOR": "arm64",
+        "VCPKG_TARGET_TRIPLET": "arm-linux"
+      }
+    }
+  ]
+}
