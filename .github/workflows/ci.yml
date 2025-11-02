@@ -22,13 +22,13 @@ jobs:
         arch: x64
 
     - name: Config
-      run: cmake --preset=win-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVELOP=OFF
+      run: cmake --preset=windows-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVELOP=OFF
 
     - name: Build
-      run: cmake --build .build/win-${{ matrix.config }}
+      run: cmake --build .build/windows-${{ matrix.config }}
 
     - name: Testing
-      run: ctest --test-dir .build/win-${{ matrix.config }}
+      run: ctest --test-dir .build/windows-${{ matrix.config }}
 
   windows_arm64:
     strategy:
@@ -47,13 +47,13 @@ jobs:
         arch: arm64
 
     - name: Config
-      run: cmake --preset=win-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVELOP=OFF
+      run: cmake --preset=windows-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVELOP=OFF
 
     - name: Build
-      run: cmake --build .build/win-${{ matrix.config }}
+      run: cmake --build .build/windows-${{ matrix.config }}
 
     - name: Testing
-      run: ctest --test-dir .build/win-${{ matrix.config }}
+      run: ctest --test-dir .build/windows-${{ matrix.config }}
 
   ubuntu_x64:
     strategy:
@@ -77,3 +77,49 @@ jobs:
 
     - name: Testing
       run: ctest --test-dir .build/linux-${{ matrix.config }}
+
+  macos_x64:
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [clang-x64-dbg, clang-x64-rel]
+
+    runs-on: macos-15-intel
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup
+      run: brew install llvm@21 && export PATH="/opt/homebrew/opt/llvm@21/bin:$PATH"
+
+    - name: Config
+      run: cmake --preset=macos-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVELOP=OFF
+
+    - name: Build
+      run: cmake --build .build/macos-${{ matrix.config }}
+
+    - name: Testing
+      run: ctest --test-dir .build/macos-${{ matrix.config }}
+
+  macos_arm64:
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [clang-arm64-dbg, clang-arm64-rel]
+
+    runs-on: macos-15
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup
+      run: brew install llvm@21 && export PATH="/opt/homebrew/opt/llvm@21/bin:$PATH"
+
+    - name: Config
+      run: cmake --preset=macos-${{ matrix.config }} -DZQF_DOXYGEN=OFF -DZQF_DEVELOP=OFF
+
+    - name: Build
+      run: cmake --build .build/macos-${{ matrix.config }}
+
+    - name: Testing
+      run: ctest --test-dir .build/macos-${{ matrix.config }}

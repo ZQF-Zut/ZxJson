@@ -54,9 +54,10 @@ namespace ZQF::Zut::ZxJson::Plat
     }
   }
 } // namespace ZQF::Zut::ZxJson::Plat
-#elif __linux__
+#else
 #include <fcntl.h>
 #include <unistd.h>
+#include <string>
 
 namespace ZQF::Zut::ZxJson::Plat
 {

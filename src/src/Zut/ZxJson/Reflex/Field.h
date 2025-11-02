@@ -92,11 +92,13 @@ namespace ZQF::Zut::ZxJson::Reflex
 
         if constexpr (Traits::is_std_array_v<field_type_t>)
         {
-          for (auto&& [idx, jv] : std::views::enumerate(Reader))
+          std::size_t idx{};
+          for (auto&& jv : Reader)
           {
             ele_type tmp;
             Field::ReadBase(tmp, jv);
             Field[idx] = std::move(tmp);
+            idx++;
           }
         }
         else

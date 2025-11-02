@@ -5,21 +5,21 @@
   ],
   "configurePresets": [
     {
-      "name": "macos-clang-x64-dbg",
-      "displayName": "MacOS Clang x64 Debug",
+      "name": "macos-clang-arm64-dbg",
+      "displayName": "MacOS Clang ARM64 Debug",
       "inherits": "macos-clang-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_OSX_ARCHITECTURES":"x86_64"
+        "CMAKE_OSX_ARCHITECTURES":"arm64"
       }
     },
     {
-      "name": "macos-clang-x64-rel",
-      "displayName": "MacOS Clang x64 Release",
+      "name": "macos-clang-arm64-rel",
+      "displayName": "MacOS Clang ARM64 Release",
       "inherits": "macos-clang-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_OSX_ARCHITECTURES":"x86_64"
+        "CMAKE_OSX_ARCHITECTURES":"arm64"
       }
     }
   ]

@@ -12,6 +12,7 @@
     "cmake/presets/linux-gcc-x64.json",
     "cmake/presets/linux-clang-x64.json",
     "cmake/presets/macos-clang-x64.json",
+    "cmake/presets/macos-clang-arm64.json",
     "cmake/presets/mingw-gcc-x64.json"
   ]
 }
