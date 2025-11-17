@@ -29,8 +29,8 @@
       }
     },
     {
-      "name": "windows-msvc-x86-rel-mt",
-      "displayName": "Windows MSVC x86 Release MT",
+      "name": "windows-msvc-x86-rel-static",
+      "displayName": "Windows MSVC x86 Release Static",
       "inherits": "windows-msvc-x86-rel",
       "cacheVariables": {
         "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded",
@@ -38,17 +38,17 @@
       }
     },
     {
-      "name": "windows-msvc-x86-msr-mt",
-      "displayName": "Windows MSVC x86 MinSizeRel MT",
-      "inherits": "windows-msvc-x86-rel-mt",
+      "name": "windows-msvc-x86-msr-static",
+      "displayName": "Windows MSVC x86 MinSizeRel Static",
+      "inherits": "windows-msvc-x86-rel-static",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "MinSizeRel"
       }
     },
     {
-      "name": "windows-msvc-x86-rwi-mt",
-      "displayName": "Windows MSVC x86 RelWithDebInfo MT",
-      "inherits": "windows-msvc-x86-rel-mt",
+      "name": "windows-msvc-x86-rwi-static",
+      "displayName": "Windows MSVC x86 RelWithDebInfo Static",
+      "inherits": "windows-msvc-x86-rel-static",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo"
       }

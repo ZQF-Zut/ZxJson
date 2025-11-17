@@ -10,7 +10,7 @@
       "inherits": "linux-gcc-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "VCPKG_TARGET_TRIPLET": "x64-linux"
+        "VCPKG_TARGET_TRIPLET": "x64-linux-dynamic"
       }
     },
     {
@@ -19,6 +19,22 @@
       "inherits": "linux-gcc-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "VCPKG_TARGET_TRIPLET": "x64-linux-dynamic"
+      }
+    },
+    {
+      "name": "linux-gcc-x64-dbg-static-md",
+      "displayName": "Linux GCC x64 Debug Static MD",
+      "inherits": "linux-gcc-x64-dbg",
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "x64-linux"
+      }
+    },
+    {
+      "name": "linux-gcc-x64-rel-static-md",
+      "displayName": "Linux GCC x64 Release Static MD",
+      "inherits": "linux-gcc-x64-rel",
+      "cacheVariables": {
         "VCPKG_TARGET_TRIPLET": "x64-linux"
       }
     }

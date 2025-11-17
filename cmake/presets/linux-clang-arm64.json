@@ -11,7 +11,7 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_SYSTEM_PROCESSOR": "arm64",
-        "VCPKG_TARGET_TRIPLET": "arm64-linux"
+        "VCPKG_TARGET_TRIPLET": "arm64-linux-dynamic"
       }
     },
     {
@@ -21,6 +21,22 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_SYSTEM_PROCESSOR": "arm64",
+        "VCPKG_TARGET_TRIPLET": "arm64-linux-dynamic"
+      }
+    },
+    {
+      "name": "linux-clang-arm64-dbg-static-md",
+      "displayName": "Linux Clang ARM64 Debug Static MD",
+      "inherits": "linux-clang-arm64-dbg",
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "arm64-linux-"
+      }
+    },
+    {
+      "name": "linux-clang-arm64-rel-static-md",
+      "displayName": "Linux Clang ARM64 Release Static MD",
+      "inherits": "linux-clang-arm64-rel",
+      "cacheVariables": {
         "VCPKG_TARGET_TRIPLET": "arm64-linux"
       }
     }

@@ -1,0 +1,86 @@
+{
+  "version": 6,
+  "include": [
+    "base.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "windows-clang-cl-arm64-dbg",
+      "displayName": "Windows Clang-cl ARM64 Debug",
+      "inherits": "windows-clang-cl-base",
+      "architecture": {
+        "value": "ARM64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_COMPILER_TARGET": "arm64-pc-windows-msvc",
+        "CMAKE_CXX_COMPILER_TARGET": "arm64-pc-windows-msvc"
+      }
+    },
+    {
+      "name": "windows-clang-cl-arm64-dbg-static",
+      "displayName": "Windows Clang-cl ARM64 Debug Static",
+      "inherits": "windows-clang-cl-arm64-dbg",
+      "cacheVariables": {
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDebug",
+        "VCPKG_TARGET_TRIPLET": "arm64-windows-static"
+      }
+    },
+    {
+      "name": "windows-clang-cl-arm64-rel",
+      "displayName": "Windows Clang-cl ARM64 Release",
+      "inherits": "windows-clang-cl-base",
+      "architecture": {
+        "value": "ARM64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_C_COMPILER_TARGET": "arm64-pc-windows-msvc",
+        "CMAKE_CXX_COMPILER_TARGET": "arm64-pc-windows-msvc"
+      }
+    },
+    {
+      "name": "windows-clang-cl-arm64-rel-static",
+      "displayName": "Windows Clang-cl ARM64 Release Static",
+      "inherits": "windows-clang-cl-arm64-rel",
+      "cacheVariables": {
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded",
+        "VCPKG_TARGET_TRIPLET": "arm64-windows-static"
+      }
+    },
+    {
+      "name": "windows-clang-cl-arm64-msr",
+      "displayName": "Windows Clang-cl ARM64 MinSizeRel",
+      "inherits": "windows-clang-cl-arm64-rel",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel"
+      }
+    },
+    {
+      "name": "windows-clang-cl-arm64-msr-static",
+      "displayName": "Windows Clang-cl ARM64 MinSizeRel Static",
+      "inherits": "windows-clang-cl-arm64-rel-static",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel"
+      }
+    },
+    {
+      "name": "windows-clang-cl-arm64-rwi",
+      "displayName": "Windows Clang-cl ARM64 RelWithDebInfo",
+      "inherits": "windows-clang-cl-arm64-rel",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    },
+    {
+      "name": "windows-clang-cl-arm64-rwi-static",
+      "displayName": "Windows Clang-cl ARM64 RelWithDebInfo Static",
+      "inherits": "windows-clang-cl-arm64-rel-static",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    }
+  ]
+}

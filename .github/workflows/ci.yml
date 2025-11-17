@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config: [msvc-x64-dbg, msvc-x64-rel, msvc-x64-dbg-mt, msvc-x64-rel-mt, clang-cl-x64-dbg, clang-cl-x64-rel, clang-cl-x64-dbg-mt, clang-cl-x64-rel-mt]
+        config: [msvc-x64-dbg, msvc-x64-rel, msvc-x64-dbg-static, msvc-x64-rel-static, clang-cl-x64-dbg, clang-cl-x64-rel, clang-cl-x64-dbg-static, clang-cl-x64-rel-static]
 
     runs-on: windows-2022
     steps:
@@ -34,7 +34,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config: [msvc-arm64-dbg, msvc-arm64-rel, msvc-arm64-dbg-mt, msvc-arm64-rel-mt]
+        config: [msvc-arm64-dbg, msvc-arm64-rel, msvc-arm64-dbg-static, msvc-arm64-rel-static]
 
     runs-on: windows-11-arm
     steps:
@@ -59,7 +59,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config: [gcc-x64-dbg, gcc-x64-rel, clang-x64-dbg, clang-x64-rel]
+        config: [gcc-x64-dbg, gcc-x64-rel, gcc-x64-rel-static-md, clang-x64-dbg, clang-x64-rel, clang-x64-rel-static-md]
 
     runs-on: ubuntu-24.04
     steps:
@@ -82,7 +82,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config: [gcc-arm64-dbg, gcc-arm64-rel, clang-arm64-dbg, clang-arm64-rel]
+        config: [gcc-arm64-dbg, gcc-arm64-rel, gcc-arm64-rel-static-md, clang-arm64-dbg, clang-arm64-rel, clang-arm64-rel-static-md]
 
     runs-on: ubuntu-24.04-arm
     steps:

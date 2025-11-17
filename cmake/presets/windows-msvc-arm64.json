@@ -17,8 +17,8 @@
       }
     },
     {
-      "name": "windows-msvc-arm64-dbg-mt",
-      "displayName": "Windows MSVC ARM64 Debug MT",
+      "name": "windows-msvc-arm64-dbg-static",
+      "displayName": "Windows MSVC ARM64 Debug Static",
       "inherits": "windows-msvc-arm64-dbg",
       "cacheVariables": {
         "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDebug",
@@ -38,8 +38,8 @@
       }
     },
     {
-      "name": "windows-msvc-arm64-rel-mt",
-      "displayName": "Windows MSVC ARM64 Release MT",
+      "name": "windows-msvc-arm64-rel-static",
+      "displayName": "Windows MSVC ARM64 Release Static",
       "inherits": "windows-msvc-arm64-rel",
       "cacheVariables": {
         "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded",
@@ -55,9 +55,9 @@
       }
     },
     {
-      "name": "windows-msvc-arm64-msr-mt",
-      "displayName": "Windows MSVC ARM64 MinSizeRel MT",
-      "inherits": "windows-msvc-arm64-rel-mt",
+      "name": "windows-msvc-arm64-msr-static",
+      "displayName": "Windows MSVC ARM64 MinSizeRel Static",
+      "inherits": "windows-msvc-arm64-rel-static",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "MinSizeRel"
       }
@@ -71,9 +71,9 @@
       }
     },
     {
-      "name": "windows-msvc-arm64-rwi-mt",
-      "displayName": "Windows MSVC ARM64 RelWithDebInfo MT",
-      "inherits": "windows-msvc-arm64-rel-mt",
+      "name": "windows-msvc-arm64-rwi-static",
+      "displayName": "Windows MSVC ARM64 RelWithDebInfo Static",
+      "inherits": "windows-msvc-arm64-rel-static",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo"
       }

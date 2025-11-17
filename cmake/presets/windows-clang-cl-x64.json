@@ -13,12 +13,14 @@
         "strategy": "external"
       },
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_COMPILER_TARGET": "x86_64-pc-windows-msvc",
+        "CMAKE_CXX_COMPILER_TARGET": "x86_64-pc-windows-msvc"
       }
     },
     {
-      "name": "windows-clang-cl-x64-dbg-mt",
-      "displayName": "Windows Clang-cl x64 Debug MT",
+      "name": "windows-clang-cl-x64-dbg-static",
+      "displayName": "Windows Clang-cl x64 Debug Static",
       "inherits": "windows-clang-cl-x64-dbg",
       "cacheVariables": {
         "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreadedDebug",
@@ -34,12 +36,14 @@
         "strategy": "external"
       },
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_C_COMPILER_TARGET": "x86_64-pc-windows-msvc",
+        "CMAKE_CXX_COMPILER_TARGET": "x86_64-pc-windows-msvc"
       }
     },
     {
-      "name": "windows-clang-cl-x64-rel-mt",
-      "displayName": "Windows Clang-cl x64 Release MT",
+      "name": "windows-clang-cl-x64-rel-static",
+      "displayName": "Windows Clang-cl x64 Release Static",
       "inherits": "windows-clang-cl-x64-rel",
       "cacheVariables": {
         "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded",
@@ -55,9 +59,9 @@
       }
     },
     {
-      "name": "windows-clang-cl-x64-msr-mt",
-      "displayName": "Windows Clang-cl x64 MinSizeRel MT",
-      "inherits": "windows-clang-cl-x64-rel-mt",
+      "name": "windows-clang-cl-x64-msr-static",
+      "displayName": "Windows Clang-cl x64 MinSizeRel Static",
+      "inherits": "windows-clang-cl-x64-rel-static",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "MinSizeRel"
       }
@@ -71,9 +75,9 @@
       }
     },
     {
-      "name": "windows-clang-cl-x64-rwi-mt",
-      "displayName": "Windows Clang-cl x64 RelWithDebInfo MT",
-      "inherits": "windows-clang-cl-x64-rel-mt",
+      "name": "windows-clang-cl-x64-rwi-static",
+      "displayName": "Windows Clang-cl x64 RelWithDebInfo Static",
+      "inherits": "windows-clang-cl-x64-rel-static",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo"
       }
