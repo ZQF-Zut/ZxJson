@@ -29,7 +29,7 @@
       "displayName": "Linux Clang ARM64 Debug Static MD",
       "inherits": "linux-clang-arm64-dbg",
       "cacheVariables": {
-        "VCPKG_TARGET_TRIPLET": "arm64-linux-"
+        "VCPKG_TARGET_TRIPLET": "arm64-linux"
       }
     },
     {

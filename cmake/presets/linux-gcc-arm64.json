@@ -29,7 +29,7 @@
       "displayName": "Linux GCC ARM64 Debug Static MD",
       "inherits": "linux-gcc-arm64-dbg",
       "cacheVariables": {
-        "VCPKG_TARGET_TRIPLET": "arm64-linux-"
+        "VCPKG_TARGET_TRIPLET": "arm64-linux"
       }
     },
     {
