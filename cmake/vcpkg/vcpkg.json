@@ -12,14 +12,14 @@
   "vcpkg-configuration": {
     "default-registry": {
       "kind": "git",
-      "repository": "https://github.com/Microsoft/vcpkg",
-      "baseline": "594ad8871e1e8e45f8e626c015fd611163430207"
+      "repository": "https://github.com/Microsoft/vcpkg.git",
+      "baseline": "5d57f5a0a5469a23e005fc79a7c1814ab4fc967e"
     },
     "registries": [
       {
         "kind": "git",
         "repository": "https://github.com/Dir-A/Registry.git",
-        "baseline": "94a4634c10573c551b4ac0dad02e4c0dc8e94b06",
+        "baseline": "65c664cfca60f456fb695446603d178d91e33f60",
         "packages": [
           "zqf-*"
         ]

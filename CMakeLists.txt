@@ -15,6 +15,11 @@ find_package(zqf_cmake_modules CONFIG REQUIRED)
 if(ZQF_DEVELOP)
   include("zqf_settings")
   include("zqf_profiles")
+  include("zqf_optimizer")
+  zqf_set_output_dir()
+  zqf_optimizer_enable_lto()
+  zqf_optimizer_enable_gc_sections()
+  zqf_profiles_fetch(CLANGD EDITOR_CONFIG)
 endif()
 
 # Source
