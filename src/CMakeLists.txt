@@ -1,7 +1,7 @@
-# Project Name
+# Project
 project(zqf_zut_zxjson VERSION 1.0 LANGUAGES C CXX)
 
-# Set Library
+# Library
 add_library(${PROJECT_NAME}
   "src/Zut/ZxJson/JDoc.cpp"
   "src/Zut/ZxJson/JIO.cpp"

@@ -10,10 +10,10 @@ project(zqf_zut_zxjson_main)
 
 # Modules
 find_package(zqf_cmake_modules CONFIG REQUIRED)
+include("zqf_settings")
 
 # Config
 if(ZQF_DEVELOP)
-  include("zqf_settings")
   include("zqf_profiles")
   include("zqf_optimizer")
   zqf_set_output_dir()
