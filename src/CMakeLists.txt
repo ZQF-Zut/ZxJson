@@ -18,7 +18,9 @@ zqf_set_warning(${PROJECT_NAME} PRIVATE AllExtra)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
 
 # Properties
-set_target_properties(${PROJECT_NAME} PROPERTIES EXPORT_NAME ZxJson)
+set_target_properties(${PROJECT_NAME} PROPERTIES EXPORT_NAME "ZxJson")
+set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_VISIBILITY_PRESET hidden VISIBILITY_INLINES_HIDDEN YES)
 
 # Install
 include("zqf_installer")
