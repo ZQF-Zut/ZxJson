@@ -10,12 +10,12 @@ project(zqf_zut_zxjson_main)
 
 # Modules
 find_package(zqf_cmake_modules CONFIG REQUIRED)
-include("zqf_settings")
 
 # Config
 if(ZQF_DEVELOP)
   include("zqf_profiles")
   include("zqf_optimizer")
+  include("zqf_settings")
   zqf_set_output_dir()
   zqf_optimizer_enable_lto()
   zqf_optimizer_enable_gc_sections()

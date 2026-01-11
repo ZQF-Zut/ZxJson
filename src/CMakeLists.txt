@@ -13,6 +13,7 @@ add_library(ZQF::Zut::ZxJson ALIAS ${PROJECT_NAME})
 target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/src/> $<INSTALL_INTERFACE:include>)
 
 # Compiler
+include("zqf_settings")
 zqf_set_encoding(${PROJECT_NAME} PRIVATE UTF8)
 zqf_set_warning(${PROJECT_NAME} PRIVATE AllExtra)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
