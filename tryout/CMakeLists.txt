@@ -12,3 +12,6 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
 
 # External Libraries
 target_link_libraries("${PROJECT_NAME}" PRIVATE ZQF::Zut::ZxJson)
+
+# Test Json File
+configure_file("${CMAKE_CURRENT_LIST_DIR}/test.json" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} COPYONLY)

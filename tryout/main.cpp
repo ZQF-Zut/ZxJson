@@ -92,7 +92,7 @@ namespace ZQF
 {
   ZQF::ZxRecord record;
 
-  auto raw_data = ::FetchFileData(u8"test.json");
+  const auto raw_data = ::FetchFileData(u8"test.json");
   for (size_t i = 0; i < 200; i++)
   {
     record.Beg();

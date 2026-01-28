@@ -1,5 +1,6 @@
 #pragma once
 #include <ranges>
+#include <Zut/ZxJson/JValue.h>
 #include <Zut/ZxJson/Reflex/Traits.h>
 
 namespace ZQF::Zut::ZxJson::Reflex
