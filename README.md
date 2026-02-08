@@ -136,3 +136,41 @@ auto main() -> int
 }
 ```
 
+## Install
+
+- vcpkg
+
+  `vcpkg.json`
+
+    ```json
+    {
+      "name": "zxjson-test",
+      "version": "1.0",
+      "dependencies": [
+        "zqf-zut-zxjson"
+      ],
+      "vcpkg-configuration": {
+        "default-registry": {
+          "kind": "git",
+          "repository": "https://github.com/Microsoft/vcpkg",
+          "baseline": "29ff5b8131d0c6c8fcb8fbaef35992f0d507cd7c"
+        },
+        "registries": [
+          {
+            "kind": "git",
+            "repository": "https://github.com/Dir-A/Registry.git",
+            "baseline": "a30058c632ccf7530627f39eff624d495444d676",
+            "packages": [
+              "zqf-*"
+            ]
+          }
+        ]
+      }
+    }
+    ```
+   `CMakeLists.txt`
+   ```cmake
+   find_package(zqf_zut_zxjson CONFIG REQUIRED)
+   target_link_libraries(${PROJECT_NAME} PRIVATE ZQF::Zut::ZxJson)
+   ```
+
