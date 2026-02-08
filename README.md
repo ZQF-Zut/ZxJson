@@ -101,6 +101,18 @@ auto main() -> int
       .map_xx{ { "131212", 666 }, { "349y83", 5474 } },
     };
     ZxJson::StoreViaFile("test_reflex.json", ZxJson::ReflexStore(org_obj), true, true);
+    /* test_reflex.json
+      {
+         "pos": 10.220000,
+         "age": 11,
+         "sex": "23523",
+         "arrx": [49,50,51,0,0,0],
+         "map_xx": {"349y83": 5474,"131212": 666},
+         "list_xx": ["sgs","sdoigs","soihgew"],
+         "vec_x": [1,2,3],
+         "vec_xx": ["10086","666","2233"]
+      }
+    */
 
     Struct reflex_obj{};
     ZxJson::ReflexLoad(reflex_obj, ZxJson::LoadViaFile("test_reflex.json"));
