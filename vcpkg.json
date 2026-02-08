@@ -19,7 +19,7 @@
       {
         "kind": "git",
         "repository": "https://github.com/Dir-A/Registry.git",
-        "baseline": "65c664cfca60f456fb695446603d178d91e33f60",
+        "baseline": "f4cb7288302a1278d55874328c8b01c32802eeef",
         "packages": [
           "zqf-*"
         ]

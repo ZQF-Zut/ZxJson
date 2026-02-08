@@ -70,11 +70,11 @@ TEST_CASE("value")
 
   // char[] &
   {
-    char char_str_r[] = "greiojhger";               // NOLINT
+    char char_str_r[] = "greiojhger"; // NOLINT
     json_value = char_str_r;
     REQUIRE(json_value.GetStrView() == char_str_r); // NOLINT
     ZxJson::JValue jv_char_r{ char_str_r };
-    REQUIRE(jv_char_r.GetStrView() == char_str_r);  // NOLINT
+    REQUIRE(jv_char_r.GetStrView() == char_str_r); // NOLINT
   }
 
   // const char*
@@ -388,7 +388,7 @@ TEST_CASE("parse_unicode_escape")
 TEST_CASE("load_store")
 {
   ZxJson::StoreViaFile(
-      "test.json",
+      "store_test.json",
       ZxJson::JObject_t{
           { "qq", 123 },
           { "ger", 1.34234 },
@@ -396,14 +396,14 @@ TEST_CASE("load_store")
       },
       true, true);
 
-  REQUIRE(std::filesystem::exists("test.json"));
-  const auto jval = ZxJson::LoadViaFile("test.json");
+  REQUIRE(std::filesystem::exists("store_test.json"));
+  const auto jval = ZxJson::LoadViaFile("store_test.json");
   REQUIRE(jval.At("qq").GetNum() == 123);
   REQUIRE(jval.At("ger").GetFloat() > 1.3);
   REQUIRE(jval.At("ger").GetFloat() < 1.4);
   REQUIRE(jval.At("afsdgds").GetStrView() == "segse");
 
-  REQUIRE(std::filesystem::remove("test.json"));
+  REQUIRE(std::filesystem::remove("store_test.json"));
 }
 
 TEST_CASE("force_save")
