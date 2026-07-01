@@ -2,11 +2,12 @@ cmake_minimum_required(VERSION 3.31)
 
 # VCPKG
 if(ZQF_VCPKG)
-  if(NOT EXISTS "${CMAKE_BINARY_DIR}/vcpkg_fetch.cmake")
-    file(DOWNLOAD https://raw.githubusercontent.com/Dir-A/Registry/a30058c632ccf7530627f39eff624d495444d676/cmake/vcpkg_fetch.cmake "${CMAKE_BINARY_DIR}/vcpkg_fetch.cmake")
+  if(NOT EXISTS "${CMAKE_SOURCE_DIR}/.vcpkg/vcpkg-fetch.cmake")
+    file(DOWNLOAD https://raw.githubusercontent.com/Dir-A/Registry/5a4db340dd77316e86180ae22a690b4b99db54f7/cmake/vcpkg_fetch.cmake "${CMAKE_SOURCE_DIR}/.vcpkg/vcpkg-fetch.cmake")
   endif()
 
-  include("${CMAKE_BINARY_DIR}/vcpkg_fetch.cmake")
+  set(ZQF_VCPKG_VERSION "2026-05-27")
+  include("${CMAKE_SOURCE_DIR}/.vcpkg/vcpkg-fetch.cmake")
 endif()
 
 # Project
